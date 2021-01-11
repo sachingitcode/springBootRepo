@@ -1,0 +1,65 @@
+<div class="flex sm12 xs12 md6 lg6 xl4 xl4" th:fragment="input6(label,model,placeholder,counter,rules)">
+    <v-text-field th:v-model="${model}" th::counter="${counter}" th::rules="${rules}" th:label="${label}"></v-text-field>
+</div>
+<div class="flex sm12 xs12 md4 lg4 xl4 xl4" th:fragment="input4(label,model,placeholder,counter,rules)"> 
+    <v-text-field th:v-model="${model}" th::counter="${counter}" th::rules="${rules}" th:label="${label}"></v-text-field>
+</div>
+<div class="flex sm12 xs12 md12 lg12 xl12"  th:fragment="input12(label,model,placeholder,counter,rules)" >
+    <v-text-field th:v-model="${model}" th::counter="${counter}" th::rules="${rules}" th:label="${label}"></v-text-field>
+</div>
+
+<div  th:fragment="formHeader()">
+    <v-toolbar flat class="grey lighten-3">
+        <v-toolbar-title>
+            {{title}}
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn color="primary"   class="mb-2 flat" @Click="CloseForm"><v-icon>mdi-close</v-icon> Close</v-btn>
+    </v-toolbar>
+</div>
+<!--Radio Button-->
+<div  class="flex sm12 xs12 md6 lg6 xl4 xl4" th:fragment="radio6(text,model,rules)">
+    <br>
+    <v-flex xs12 sm6 md6>
+        <h6 ><span th:text="${text}"></span> </h6>
+    </v-flex>
+    <v-flex xs12 sm6 md6>
+        <v-radio-group  th:v-model="${model}" row>
+            <v-radio label="Yes" value="radio-1"></v-radio>
+            <v-radio label="No" value="radio-2"></v-radio>
+        </v-radio-group>
+    </v-flex>
+</div> 
+<div  class="flex sm12 xs12 md4 lg4 xl4 xl4" th:fragment="radio4(text,model,rules)">
+    <br>
+    <v-flex xs12 sm6 md6>
+        <h6 ><span th:text="${text}"></span> </h6>
+    </v-flex>
+    <v-flex xs12 sm6 md6>
+        <v-radio-group  th:v-model="${model}" row>
+            <v-radio label="Yes" value="radio-1"></v-radio>
+            <v-radio label="No" value="radio-2"></v-radio>
+        </v-radio-group>
+    </v-flex>
+</div> 
+<!--Calender-->
+<div  class="flex sm12 xs12 md6 lg6 xl6 xl6" th:fragment="calender6(label,model,rules)">
+    <v-menu v-model="menu9" :close-on-content-click="false" :nudge-right="40"
+            transition="scale-transition" offset-y min-width="290px">
+        <template v-slot:activator="{ on }">
+            <v-text-field  th:v-model="${model}" th:label="${label}" hint="(post holding at present)"
+                           prepend-icon="mdi-calendar-today" readonly v-on="on"></v-text-field>
+        </template>
+        <v-date-picker   th:v-model="${model}"  @input="menu9 = false"></v-date-picker>
+    </v-menu>
+    <v-spacer></v-spacer>
+</div>
+
+
+
+
+
+
+
+
+

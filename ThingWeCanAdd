@@ -1,0 +1,37 @@
+
+sudo start mysql service
+Sachin#123
+ SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+  SET   sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+logs at /home/maverick/NetBeansProjects/Downloads/IHE_2/logs.log
+
+
+add
+ lauguage change
+ add dahborad with NOtification , logo, Events ,Calender
+ 
+ 
+ change on click in same page  single / bulk 
+ dailog box , to view 
+ maps
+ 
+ 
+ prehandling and post handling in Interceptor :package com.ils.Interceptor;
+
+
+
+ 
+ 
+ 
+ 
+ 
+ Things to  study !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ 
+ SimpleGrantedAuthority why ROLE_ prefix is always required
+    http.csrf().disable();  
+    json_object mysql json_array
+    dbtables PrintOut Excel etc
+    
+    
+    > to_date('04-01-21','DD-MM-YY')

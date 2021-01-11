@@ -1,0 +1,198 @@
+<v-app id="addApplication9">
+    <div data-th-replace="fragments/text-field :: formHeader()"></div>
+    <v-form ref="form" v-model="valid" lazy-validation>
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="v-label theme--light pt-8">
+                    I declare that the information given above is correct to the best of knowledge and belief, i agreed
+                    to pay all fees advance and to abid by the terms and regulation stated in the Prospectus
+                </v-flex>
+                <v-flex xs12 sm12 md4 lg4 xl4>
+                    <v-radio-group  v-model="userData.row" row>
+                        <v-radio label="Yes" value="radio-1"></v-radio>
+                        <v-radio label="No" value="radio-2"></v-radio>
+                    </v-radio-group>
+                </v-flex>
+                <v-flex data-th-replace="fragments/text-field :: input6(label='Signature of the Parent/Guardian',model='userData.par_g',placeholder='Signature of the Parent/Guardian',counter='',rules='[rules.required,rules.length]')"></v-flex>
+                <v-flex data-th-replace="fragments/text-field :: input6(label='Signature of the Student',model='userData.stu_of',placeholder='Signature of the Student',counter='',rules='[rules.required,rules.length]')"></v-flex>
+                <v-flex xs12 sm12 md6 lg6 xl6 >
+                    <v-menu
+                        v-model="userData.menu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                        >
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                v-model="userData.date"
+                                label="Dated"
+                                prepend-icon="mdi-calendar-today"
+                                readonly
+                                v-on="on"
+                                ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="userData.date"  @input="userData.menu = false"></v-date-picker>
+                    </v-menu>              
+                </v-flex> 
+                <v-flex xs12 sm12 md12 lg12 xl12 class="v-label theme--light">
+                    (Incompelete application forms without proper enclouseres shall be liable for outright rejection)   </v-flex>
+                <div th:replace="fragments/formelements.html :: footerbuttons()"></div>
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#addApplication9",
+        vuetify: new Vuetify(),
+        data: {
+            title: /*[[${session.title}]]*/'',
+            search: null,
+            select: null,
+            menu: false,
+            valid: true,
+            date: '',
+            userData: {
+                row: '',
+                par_g: '',
+                stu_of: '',
+                date: '',
+                oth_ret: [{
+                        details: '', }],
+            },
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits',
+
+            },
+        },
+        methods: {
+            CloseForm() {
+                CloseForm();
+//                $("#formcontainer").css("display", "none");
+//                $("#formContent").html("");
+            },
+            addRow(){
+                this.userData.oth_ret.push({
+                    details: '',
+                })
+            },
+
+            deleteRow() {
+                var myData = this.userData.oth_ret;
+                if (myData.length > 1) {
+                    this.userData.oth_ret.splice(-1, 1)
+                }
+            },
+
+            NextSubmit() {
+                axios.post('/saveData', this.userData)
+                        .then(response => {
+                            if (response.data === true) {
+                                ApplyForm(1);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+
+            PreviousSubmit() {
+                LoadPrevForm();
+            },
+
+            Submit() {
+                var listpage = /*[[${session.listPages}]]*/;
+                  axios.post('/saveData',
+                                {
+                                    "id": this.id,
+                                    "userData": this.userData
+                                })
+                        .then(response => {
+                            ListingPages(listpage);
+                        })
+                        .catch(e => {
+                            alert("Error " + e);
+                        })
+            },
+            saveasDraft() {
+
+            }
+        },
+
+        created() {
+            axios.get('/findById')
+                    .then(response => {
+                        if (response.data != "")
+                        {
+                            this.userData = JSON.parse(response.data.dt);
+                            this.id = response.data.id;
+                        }
+                    })
+                    .catch(e => {
+                        alert("Error" + e);
+                    })
+        }
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

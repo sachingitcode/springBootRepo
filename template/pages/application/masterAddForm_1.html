@@ -1,0 +1,169 @@
+<v-app id="masterAddForm123">
+    <div data-th-replace="fragments/text-field :: formHeader()"></div>
+    <v-form ref="form" v-model="valid" lazy-validation>
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <layout>
+                <v-flex xs12 sm4 md4 lg4 xl4 >
+                    <h3>Master:</h3> 
+                </v-flex>
+                <v-flex xs12 sm4 md4 lg4 xl4 class="">    <v-text-field xs12 sm6 md6 lg6 xl4 placeholder="Master"  v-model="userData.master" ></v-text-field>
+                </v-flex>  <v-flex xs12 sm12 md12 lg12 xl12 class=""></v-flex>
+                <v-card class="pl-10">
+                    <v-card-title class="text-right">
+                        <v-btn icon color="green" @click="addRow">
+                            <v-icon color="white">add</v-icon>
+                        </v-btn>
+                        <v-btn icon color="red" @click="deleteRow">
+                            <v-icon color="white">remove</v-icon>
+                        </v-btn>
+                    </v-card-title>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="40%">Master Type:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.oth_ret" :key="index">
+                                <td class="text-xs-center"> 
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Enter Master Values" v-model="input.details" ></v-text-field>
+                        </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </v-card>
+                <v-flex xs12 sm12 md12 lg12 xl12 class=" text-sm-center">
+                    <div th:replace="fragments/formelements.html :: footerbuttons()"></div></v-flex>
+                </v-layout>   
+        </v-container>
+    </v-form>
+</v-app>
+
+<script th:inline="javascript">
+    new Vue({
+        el: "#masterAddForm123",
+        data: {
+            valid: true,
+            title: 'masterAddForm123',
+            userData: {
+                master: '',
+                oth_ret: [{
+                        details: '', }],
+            },
+
+        },
+        methods: {
+
+            addRow() {
+                this.userData.oth_ret.push({
+                    details: '',
+                })
+            },
+            deleteRow() {
+                var myData = this.userData.oth_ret;
+                if (myData.length > 1) {
+                    this.userData.oth_ret.splice(-1, 1)
+                }
+            },
+
+            CloseForm() {
+                CloseForm()
+            },
+            Submit() {
+                axios.post('/saveMasterData',
+                        {
+                            "master": this.userData.master,
+                            "userData": this.userData.oth_ret
+                        })
+                        .then(response => {
+                            ListingPages(/*[[${session.listPages}]]*/);
+                        })
+                        .catch(e => {
+                            alert("Error " + e);
+                        })
+            },
+
+            saveasDraft() {}
+        },
+
+        created() {
+            axios.get(`/findMastersById`)
+                    .then(response => {
+                 
+                        this.userData.master = response.data.name;
+                        this.userData.oth_ret = [{details: India },{details: China },{details: USA }] ;
+
+                    }).catch(e => {
+                console.log("Error " + e);
+            })
+
+
+//            axios.get('/findMastersById')
+//                    .then(response => {
+//                        if (response.data != "")
+//                        {
+//                            this.userData = response.data.name;
+//                            this.id = response.data.value;
+//                        }
+//                    })
+//                    .catch(e => {
+//                        alert("Error" + e);
+//                    }) 
+
+
+
+        }
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

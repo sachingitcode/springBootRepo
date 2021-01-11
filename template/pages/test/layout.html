@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">
+      SpringbootApp
+    </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      name="viewport"
+    />
+
+    <!-- MDB -->
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
+    <!-- Bootstrap core CSS -->
+    <link href="/static/plugins/mdb-4-7.3/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Material Design Bootstrap -->
+    <link href="/static/plugins/mdb-4-7.3/css/mdb.min.css" rel="stylesheet" />
+    <!-- Your custom styles (optional) -->
+    <link href="/static/plugins/mdb-4-7.3/css/style.css" rel="stylesheet" />
+
+    <!-- COLORS -->
+    <link rel="stylesheet" href="/static/colors.min.css" />
+
+    <link rel="stylesheet" href="/static/css/main.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <!-- navbar -->
+      <nav class="navbar navbar-expand-md navbar-light">
+        <button
+          class="navbar-toggler ml-auto mb-2 bg-light"
+          type="button"
+          data-toggle="collapse"
+          data-target="#myNavbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- sidebar -->
+              <div
+                data-th-replace="fragments/sidebar-menu :: sidebar-menu"
+              ></div>
+              <!-- end of sidebar -->
+            </div>
+
+            <!-- sidebar menu -->
+            <div
+              data-th-replace="fragments/top-navigation :: top-navigation"
+            ></div>
+            <!-- /sidebar menu -->
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- main content-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+          <!--<div class="row pt-md-5 mt-md-3 mb-5">-->
+          <section class="content hide" id="contentcontent">
+            <div class="row">
+              <div class="col-md-12">
+                <div
+                  class="box"
+                  style="box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"
+                >
+                  <div class="box-header with-border bg-teal">
+                    <h3 class="box-title header_name" id="box-title"></h3>
+                    <div class="box-tools float-right">
+                      <button onclick="closeForm()" class="btn btn-box-tool">
+                        <i
+                          class="fas fa-times-circle-o fa-2x"
+                          style="color:white"
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <div id="formcontent"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="content">
+            <div class="row">
+              <div
+                class="col-lg-12"
+                id="contentarea"
+                style="overflow-x: auto;overflow-y: auto"
+              ></div>
+            </div>
+          </section>
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+    <!-- MDB -->
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="/static/plugins/mdb-4-7.3/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="/static/plugins/mdb-4-7.3/js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="/static/plugins/mdb-4-7.3/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="/static/plugins/mdb-4-7.3/js/mdb.js"></script>
+
+    <!-- vue js -->
+    <script src="/static/plugins/vue/vue.js"></script>
+
+    <script src="/static/js/main.js"></script>
+
+    <!-- moment -->
+    <script src="/static/plugins/moment/moment-with-locales.min.js"></script>
+
+    <!-- vue-datetime-picker -->
+    <script src="https://cdn.jsdelivr.net/npm/pc-bootstrap4-datetimepicker@4.17/build/js/bootstrap-datetimepicker.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/pc-bootstrap4-datetimepicker@4.17/build/css/bootstrap-datetimepicker.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue-bootstrap-datetimepicker@5"></script>
+
+    <!-- vue-dropzone -->
+    <link href="/static/plugins/dropzone/vue2Dropzone.min.css" rel="stylesheet" />
+    <script src="/static/plugins/dropzone/vue2Dropzone.js"></script>
+
+
+
+    <script type="text/javascript">
+      var DatePickerOpt = {
+        format: "DD/MM/YYYY",
+        useCurrent: false,
+        showClear: true,
+        showClose: true
+      };
+
+      var DropZoneOpt = {
+        url: "fileUpload",
+        thumbnailWidth: 150,
+        maxFilesize: 0.5,
+        maxFiles: 100,
+        headers: { "My-Awesome-Header": "header value" }
+        //   previewTemplate: this.template(),
+      };
+
+      var allowedFileTypes =
+        ".jpeg,.jpg,.png,.gif,.xls,.xlsx,.zip,.doc,.docx,.txt,.pdf,.Mp4,.Mkv,.Dav,.264,.Arf,.Avi,.MovAv";
+
+      // const UserInfo = () => import('/static/vue2Dropzone.js');
+
+      Vue.component("date-picker", VueBootstrapDatetimePicker);
+
+      Vue.component("vue-dropzone", vue2Dropzone);
+
+      // Using font-awesome 5 icons
+      $.extend(true, $.fn.datetimepicker.defaults, {
+        icons: {
+          time: "far fa-clock",
+          date: "far fa-calendar",
+          up: "fas fa-arrow-up",
+          down: "fas fa-arrow-down",
+          previous: "fas fa-chevron-left",
+          next: "fas fa-chevron-right",
+          today: "fas fa-calendar-check",
+          clear: "far fa-trash-alt",
+          close: "far fa-times-circle"
+        }
+      });
+
+      $(function() {
+        loadForm("pages/applicationHome");
+      });
+
+      //load URL in particular content
+      function loadForm(pageName) {
+        $(".header_name").html("");
+        $("#formcontent").html("");
+        $("#contentcontent").addClass("hide");
+        $("#contentarea").load("loadPages?pageName=" + pageName);
+      }
+    </script>
+  </body>
+</html>

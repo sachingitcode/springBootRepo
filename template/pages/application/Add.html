@@ -1,0 +1,64 @@
+<v-app id="List">
+    <v-form ref="form" v-model="valid" lazy-validation>
+        <template >
+            <v-flex xs12 sm12 md3 lg3 xl6> 
+                <v-text-field v-model="userData.name" label="Name">Name</v-text-field>
+            </v-flex>
+            <v-flex xs12 sm12 md3 lg3 xl6> 
+                <v-text-field  v-model="userData.from" label="From">From</v-text-field>
+            </v-flex>
+            <v-flex xs12 sm12 md3 lg3 xl6> 
+                <v-text-field v-model="userData.to" label="To">To</v-text-field>
+            </v-flex>
+            <v-flex xs12 sm12 md3 lg3 xl6> 
+                <v-text-field v-model="userData.pay" label="School">School</v-text-field>
+            </v-flex>
+
+            <div th:replace="fragments/formelements.html :: footerbuttonsa(previous='previous', saveasDraft='saveasDraft')"></div>
+
+        </template>
+    </v-form>
+</v-app> 
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#List",
+        data: {
+            valid: true,
+            currentId: /*[[${currentId}]]*/ '',
+            nextId: /*[[${next}]]*/ '',
+            prevId: /*[[${previous}]]*/ '',
+            id: 0,
+            userData: {
+                name: "",
+                from: "",
+                to: "",
+                pay: "",
+            },
+        },
+        methods: {
+            saveasDraft() {
+                var currentId = this.currentId;
+//                alert("sdsd" + this.currentId);
+                var nextId = this.nextId;
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+
+                        .then(response => {
+                            //                            alert("Response==>>" + response);
+                               
+                            
+                                loadForm("96ca1e5f-61d8-11e9-adee-8c89a53bcce4");
+                           
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+
+            },
+        }
+    });
+</script>

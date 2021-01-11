@@ -1,0 +1,725 @@
+<v-app id="addApplication4">
+    <v-container fluid>
+        <v-form ref="form" v-model="valid" lazy-validation>
+            <v-layout row wrap>
+
+                <v-flex xs12 sm12 md12 lg12 xl6 text-center>
+
+                    <h2>(CATEGORY – III)
+
+                    </h2>
+                </v-flex>
+            </v-layout>
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6 text-center>
+
+                    <h2>RESEARCH AND ACADEMIC CONTNRIBUTION
+
+                    </h2>
+                </v-flex>
+            </v-layout>
+            <br>
+            <br>
+
+
+
+
+
+            <v-layout>
+                <v-flex xs12 sm12 md6 lg6 xl6 >
+
+                    <h6>12 (a) Research Articles/Papers published in (i) Refereed Journals, (ii) Other Reputed Journal)
+
+                    </h6>
+
+                </v-flex>
+            </v-layout>
+            <v-layout>
+                <v-flex xs12 sm12 md6 lg6 xl6>
+
+                    <h6>(Please attach separate sheet, if necessary)
+
+
+                    </h6>
+
+                </v-flex>
+
+
+
+            </v-layout>
+
+
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Title of
+                                    research
+                                    article /
+                                    paper(s)</th>
+                                <th>Name
+                                    of the
+                                    journal</th>
+                                <th>Publis-
+                                    her of
+                                    the
+                                    journal
+                                    (City/C
+                                    ountry)</th>
+                                <th>Whether
+                                    Sole/First
+                                    & Principal/
+                                    correspondin
+                                    g/
+                                    Supervisor/
+                                    Mentor/
+                                    other Author</th>
+                                <th>Month &
+                                    year of
+                                    Publicati
+                                    on,
+                                    volume,
+                                    no.
+                                    & page
+                                    nos.</th>
+                                <th>Whether
+                                    Refereed
+                                    /
+                                    non-
+                                    refereed</th> 
+                                <th>ISS
+                                    N
+                                    No.</th>
+                                <th>Imp
+                                    act
+                                    Fact
+                                    or</th>
+
+                                <th>Self
+                                    API</th>
+                                <th>Veri
+                                    fied
+                                    API
+                                    Sco-
+                                    ress</th>
+
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.research" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Title " v-model="input.title" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Name"   v-model="input.name" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Publis-her"  v-model="input.publis_her" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Whether Sole/First & Principal/corresponding" v-model="input.whether" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.mnt_year"
+                                            label="month/year"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.mnt_year" type="month" @input="input.menu = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Refereed  /non-refereed " v-model="input.Refe_non" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="ISS N No." v-model="input.issn_no" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="Imp  act Fact or" v-model="input.imp_act" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verified API" v-model="input.ver_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+
+
+
+            <br>
+            <br>
+            <br>
+            <h6>12(b) Publications other than journal article:- Books, (i) Text/Reference, Books published by
+                International Publishers, (ii) Subject Books, published by National level publishers, (iii) Subject
+                Books, published by Other local publishers. (Please attach separate sheet, if necessary)
+
+            </h6>
+
+
+
+
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">S.No.</th>
+                                <th colspan="2" align="center" >Title of the Book (s)</th>
+                                <th rowspan="2">Whether
+                                    Sole
+                                    Author
+                                    or
+                                    Co-
+                                    author</th>
+                                <th rowspan="2">Name of
+                                    Publisher
+                                    (with city/
+                                    country)</th>
+                                <th rowspan="2"> National/
+                                    Internatio
+                                    nal
+                                    Publisher</th> 
+                                <th rowspan="2">Month
+                                    & year
+                                    of
+                                    publica
+                                    tion</th>
+                                <th rowspan="2">ISBN
+                                    No.</th>
+
+                                <th rowspan="2">Self
+                                    API</th>
+                                <th rowspan="2">Verifi
+                                    ed
+                                    API
+                                    Score</th>
+
+
+
+                            </tr>
+                            <tr>
+                                <th>Title</th>
+                                <th>Edited/ Translated/ Authored</th>
+
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.publication" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Title" v-model="input.title" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Edited/ Translated/ Authored" v-model="input.edited" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Whether
+                                      Sole
+                                      Author
+                                      or
+                                      Co-
+                                      author" v-model="input.whether" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Name of Publisher " v-model="input.publisher" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="National/
+                                      Internatio" v-model="input.national" :rules="[rules.required]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu1"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.mnt_year"
+                                            label="month/year"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.mnt_year" type="month" @input="input.menu1 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="ISBN No." v-model="input.isbn_no" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verifi
+                                      ed
+                                      API" v-model="input.verified_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow1">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow1">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+            <br>
+            <br>
+            <br>
+            <h>12. (c) Publications other than journal article: - Chapters in Books, published by National and
+                International level publishers (Please attach separate sheet, if necessary)</h>
+
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">S.No.</th>
+                                <th rowspan="2" >Title of the Chapter (s)</th>
+                                <th rowspan="2"  >Title of the Book (s)</th>
+                                <th rowspan="2">Whether
+                                    Sole
+                                    Author
+                                    or
+                                    Co-
+                                    author</th>
+                                <th rowspan="2">Name of
+                                    Publisher
+                                    (with city/
+                                    country)</th>
+                                <th rowspan="2"> National/
+                                    Internatio
+                                    nal
+                                    Publisher</th> 
+                                <th rowspan="2">Month
+                                    & year
+                                    of
+                                    publica
+                                    tion</th>
+                                <th rowspan="2">ISBN
+                                    No.</th>
+
+                                <th rowspan="2">Self
+                                    API</th>
+                                <th rowspan="2">Verifi
+                                    ed
+                                    API
+                                    Score</th>
+
+
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.publi_oth" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Title" v-model="input.title_c" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Title" v-model="input.title_b" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Whether
+                                      Sole
+                                      Author
+                                      or
+                                      Co-
+                                      author" v-model="input.whether" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Name of Publisher " v-model="input.publisher" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="National/
+                                      Internationsal" v-model="input.national" :rules="[rules.required]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu2"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.mnt_year"
+                                            label="month/year"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.mnt_year" type="month" @input="input.menu2 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="ISBN No." v-model="input.isbn_no" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verifi
+                                      ed
+                                      API" v-model="input.verified_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow2">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow2">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+
+            <div th:replace="fragments/formelements.html :: footerbuttons(previous='HandlePrevious', saveasDraft='saveasDraft',HandleSubmit='HandleSubmit')"></div>
+
+        </v-form>
+    </v-container>
+
+
+</v-app>
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#addApplication4",
+        data: {
+
+            valid: true,
+            date: '',
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /.+@.+/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits',
+
+            },
+//
+//            nameRules: [
+//                v => !!v || 'Field is required',
+//                v => (v && v.length <= 50) || 'Name must be less than 50 characters'
+//            ],
+//            fieldRules: [
+//                v => !!v || 'Field is required'],
+//            emailRules: [
+//                v => !!v || 'Field is required',
+//                v => /.+@.+/.test(v) || 'E-mail must be valid'
+//            ],
+//            numberRules: [
+//                v => !!v || 'Field is required',
+//                v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers'
+//            ],
+//            yearRules: [
+//                v => !!v || 'Year is required',
+//                v => (v && v.length === 4) || 'Year must be 4 digits',
+//                v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year'
+//            ],
+            currentId: /*[[${currentId}]]*/ '',
+            nextId: /*[[${next}]]*/ '',
+            prevId: /*[[${previous}]]*/ '',
+            id: 0,
+            userData: {
+                research: [{
+                        title: '',
+                        name: '',
+                        publis_her: '',
+                        whether: '',
+                        Refe_non: '',
+                        issn_no: '',
+                        imp_act: '',
+                        self_api: '',
+                        issn_no: '',
+                        mnt_year: '',
+                        menu: false,
+                    }],
+                publication: [{
+                        title: '',
+                        edited: '',
+                        whether: '',
+                        publisher: '',
+                        national: '',
+                        isbn_no: '',
+                        self_api: '',
+                        verified_api: '',
+                        mnt_year: '',
+                        menu1: false
+                    }],
+
+                publi_oth: [{
+                        title_c: '',
+                        title_b: '',
+                        whether: '',
+                        publisher: '',
+                        national: '',
+                        isbn_no: '',
+                        self_api: '',
+                        verified_api: '',
+                        mnt_year: '',
+                        menu2: false
+                    }],
+
+            }
+        },
+        methods: {
+            addRow() {
+                this.userData.research.push({
+                    title: '',
+                    name: '',
+                    publis_her: '',
+                    whether: '',
+                    Refe_non: '',
+                    issn_no: '',
+                    imp_act: '',
+                    self_api: '',
+                    issn_no: '',
+                    menu: false,
+                })
+            },
+            addRow1() {
+                this.userData.publication.push({
+
+                    title: '',
+                    edited: '',
+                    whether: '',
+                    publisher: '',
+                    national: '',
+                    mnt_year: '',
+                    isbn_no: '',
+                    self_api: '',
+                    verified_api: '',
+                    menu1: false,
+                })
+            },
+            addRow2() {
+                this.userData.publi_oth.push({
+                    title_c: '',
+                    title_b: '',
+                    whether: '',
+                    publisher: '',
+                    national: '',
+                    isbn_no: '',
+                    self_api: '',
+                    verified_api: '',
+                    mnt_year: '',
+                    menu2: false,
+                })
+            },
+
+            deleteRow() {
+                var myData = this.userData.research;
+                if (myData.length > 1) {
+                    this.userData.research.splice(-1, 1)
+                }
+            },
+            deleteRow1() {
+                var myData = this.userData.publication;
+                if (myData.length > 1) {
+                    this.userData.publication.splice(-1, 1)
+                }
+            },
+            deleteRow2() {
+                var myData = this.userData.publi_oth;
+                if (myData.length > 1) {
+                    this.userData.publi_oth.splice(-1, 1)
+                }
+            },
+
+            check() {
+                console.log('data==>>');
+                var myData = this.inputs;
+                for (var i in myData) {
+                    console.log(myData[i].one);
+                }
+            },
+            validate() {
+                if (this.$refs.form.validate()) {
+                    this.snackbar = true
+                }
+            },
+            reset() {
+                this.$refs.form.reset()
+            },
+            saveasDraft() {
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+
+                        .then(response => {
+//                            alert("Response==>>" + response);
+//                            alert(nextId);
+                            if (nextId !== null) {
+                                loadForm("707902c6-4a21-11e9-aaf4-8c89a53bcce4");
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+
+            },
+            HandleSubmit() {
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+//                alert("currentId==>>" + currentId);
+//                alert("nextId==>>" + nextId);
+//                alert("savedID==>>" + this.id);
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+                        .then(response => {
+//                            alert("Response==>>" + response);
+//                            alert(nextId);
+                            if (nextId !== null) {
+                                loadForm(nextId);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+
+            },
+            HandlePrevious() {
+                var currentId = removeQuot(this.currentId);
+                var prevId = removeQuot(this.prevId);
+                if (prevId !== null) {
+                    loadForm(prevId);
+                }
+            }
+
+        },
+        created() {
+            var currentId = removeQuot(this.currentId);
+            axios.get('/findById?id=' + currentId)
+                    .then(response => {
+                        if (response.data != '') {
+                            this.userData = response.data.dt;
+                            this.id = response.data.id;
+                        }
+
+
+////                     
+//                        alert("Response==>>" + response.data);
+//                        alert("Response==>>" + response.data.id);
+                    })
+                    .catch(e => {
+                        alert("Error" + e);
+                    })
+        }
+    });
+
+</script>

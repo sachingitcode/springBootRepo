@@ -1,0 +1,108 @@
+<div id="dropzoneApp">
+  <div id="m
+       " class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: auto;">
+      <div class="modal-content">
+        <div class="modal-header  bg-teal">
+          <button data-dismiss="modal" class="btn btn-box-tool float-right">
+            <i class="fas fa-times-circle"></i>
+          </button>
+          <h4 class="modal-title">Multiple File Upload</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form
+              id="mydropzone"
+              class="dropzone"
+              enctype="multipart/form-data"
+            >
+              <div
+                class="dz-default dz-message file-dropzone text-center well col-sm-12 bg-gray"
+                style="margin-top: 3px;"
+              >
+                <span class="glyphicon glyphicon-paperclip"></span>
+                <span> To attach files, drag and drop here</span><br />
+                <span>OR</span><br />
+                <span>Just Click</span>
+              </div>
+
+              <!-- this is were the previews should be shown. -->
+
+              <div class="dropzone-previews"></div>
+              <vue-dropzone
+                ref="myVueDropzone"
+                name="dropzone"
+                id="dropzone"
+                :options="dropzoneOptions"
+                v-on:vdropzone-error="showError"
+              ></vue-dropzone>
+            </form>
+            <hr />
+
+            <button @click="removeAllFiles" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Remove All
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer bg-teal">
+          <button
+            type="button"
+            class="btn btn-default btn-primary"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Button to Open the Modal -->
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#myModal"
+  >
+    Open modal
+  </button>
+
+  <div class="col-sm-12">
+    <select class="form-control" multiple> </select>
+  </div>
+</div>
+<script>
+  var myObject = new Vue({
+    el: "#dropzoneApp",
+    data: {
+      userData: {},
+      dropzoneOptions: {
+        url: "fileUploadOnServer",
+        headers: { "My-Awesome-Header": "header value" },
+        axFilesize: 2, // MB
+        maxFiles: 4,
+        chunking: true,
+        chunkSize: 500, // Bytes
+        thumbnailWidth: 150, // px
+        thumbnailHeight: 150,
+        addRemoveLinks: true,
+        acceptedFiles: allowedFileTypes,
+      }
+    },
+    methods: {
+      removeAllFiles: function() {
+        this.$refs.myVueDropzone.removeAllFiles();
+      },
+      showError: function(file) {
+        console.log("A file was successfully uploaded");
+      }
+    },
+    mounted: function() {
+    //     this.$refs.myVueDropzone.vue-dropzone.on("vdropzone-error", function(file) {
+        
+    //       alert('hhhee');
+        
+    //   });
+    }
+  });
+</script>

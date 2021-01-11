@@ -1,0 +1,290 @@
+<div th:fragment="footerbuttonsa(previous,saveasDraft)">
+    <v-layout row wrap mt-5>
+        <v-flex xs12 sm12 md12 lg12 xl6>
+
+            <v-btn v-if="prevId !='' && prevId != null"
+                   color="success"
+                   th:@click="${previous}"
+                   >
+                Back
+            </v-btn>
+            <v-btn
+                :disabled="!valid"
+                color="success"
+                th:@click="${saveasDraft}"
+                >
+                Save
+            </v-btn>
+        </v-flex> 
+    </v-layout>
+</div>
+
+
+<div style="padding:10px 10px 10px 10px;"  th:fragment="dataTablesList()">
+    <v-card>
+        <v-card-title>
+            <v-spacer></v-spacer>
+            <v-text-field
+                v-model="search"
+                append-icon="fa-search"
+                label="Search"
+                single-line
+                hide-details
+                ></v-text-field>
+        </v-card-title>
+
+        <v-data-table
+            :headers="headers"
+            :items="values"
+            :search="search"
+            :items-per-page="5"
+            >
+            <template slot="item" slot-scope="props">    
+                <tr>
+                    <td><b>{{ props.index+1 }}</b></td>
+                    <td v-for="header in headers.slice(1,limit)">
+                        {{ props.item[header.value] }}
+                    </td>
+                    <td width="5px">
+                <v-icon small class="mr-1"
+                        @click="editItem(props.item.id)"
+                        > mdi-pencil  </v-icon>
+                <v-icon small class="mr-1" 
+                        @click="deleteItem(props.item.id,props.index)">  mdi-delete    </v-icon>
+                </tr>
+            </template>
+        </v-data-table>
+    </v-card>   
+</div>
+
+
+
+
+
+<div th:fragment="footerbuttons()">
+    <v-layout row wrap mt-5>
+        <v-flex xs12 sm12 md12 lg12 xl6>
+
+            <v-btn th:if="${session.previous}"
+                   color="success"
+                   th:@click="PreviousSubmit"
+                   >
+                Previous
+            </v-btn>
+            <v-btn
+                :disabled="!valid"
+                color="success"
+                th:@click="saveasDraft"
+                >
+                Save As Draft
+            </v-btn>
+            <v-btn th:if="${session.next}"
+                   :disabled="!valid"
+                   color="success" 
+                   th:@click="NextSubmit"
+                   >
+                Save & Next
+            </v-btn>
+            <v-btn th:unless="${session.next}"
+                   :disabled="!valid"
+                   color="success" 
+                   th:@click="Submit"
+                   >
+                Submit
+            </v-btn>
+        </v-flex> 
+    </v-layout>
+</div>
+
+
+
+
+
+
+
+<div th:fragment="footerbuttonsSave()">
+    <v-layout row wrap mt-5>
+        <v-flex xs12 sm12 md12 lg12 xl6>
+
+            <v-btn  
+                   :disabled="!valid"
+                   color="success" 
+                   th:@click="Submit"
+                   >
+                Submit
+            </v-btn>
+
+            <v-btn   
+                color="orange"
+                @click="reset"
+                >  Clear</v-btn>
+
+        </v-flex> 
+    </v-layout>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+  :footer-props="footerProps"
+
+
+
+ <v-icon
+                    class="mr-1"
+                    @click="editItem(props.item.id)"
+                    >
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                     @click="deleteItem(props.item.id,props.index)"
+                    >
+                    mdi-delete
+                </v-icon>
+
+
+<div  th:fragment="pagelista(headers,values)">
+    <v-card>
+        <v-card-title>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search"
+                single-line
+                hide-details
+                ></v-text-field>
+        </v-card-title>
+        <v-data-table
+            th::headers="${headers}"
+            th::items="${values}"
+            :search="search"
+            >
+            <template slot="items" slot-scope="props">    
+                <td>{{ props.index+1 }}</td>
+                <td v-for="header in headers.slice(1,limit)">
+                    {{ props.item[header.value] }}
+                </td>
+                <template v-if="config.edit"> 
+                    <td><v-btn depressed small color="warning"  @click="">Edit</v-btn></td></template>
+                <template  v-if="config.delete"> <td><v-btn depressed small color="error" @click="deleteFile(props.item.id,props.item.jdoc)">Delete</v-btn></td></template>
+                <template v-if="config.view"><td><v-btn depressed small color="info" @click="">View</v-btn></td></template>
+            </template>
+        </v-data-table>
+    </v-card>   
+</div>-->
+
+<!--
+<v-card th:fragment="dataTablesList(headers,values)">
+    <v-card-title>
+        <v-spacer></v-spacer>
+        <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+            ></v-text-field>
+    </v-card-title>
+    <v-data-table
+        th::headers="${headers}"
+        th::items="${values}"
+        :search="search"
+        >
+        <template slot="items" slot-scope="props">    
+            <td>{{ props.index+1 }}</td>
+            <td v-for="header in headers.slice(1,limit)">
+                {{ props.item[header.value] }}
+            </td>
+            <td class="justify-center layout px-0">
+            <v-icon
+                small
+                class="mr-2"
+                @click="editItem(props.item)"
+                >
+                edit
+            </v-icon>
+            <v-icon
+                small
+                @click="deleteItem(props.item)"
+                >
+                delete
+            </v-icon>
+            </td>
+            <template v-slot:no-data>
+                No Data Available
+            </template>
+    </v-data-table>
+</v-card>-->
+<!--<div
+    th:fragment="input(label,id, divId,model,maxlength,placeholder,onblur)"
+    class="col-lg-6 col-md-6 mb-4"
+    th:id="${divId}"
+    >
+
+    <label for="form1" class=""><span th:text="${label}"></span></label>
+    <input
+        type="text"
+        id="form1"
+        class="form-control"
+        th:@blur="${onblur}"
+        th:maxlength="${maxlength}"
+        th:v-model="${model}"
+        />
+</div>
+
+<div
+    th:fragment="select(label, id,divId, model, list,onchange)"
+    class="col-lg-6 col-md-6 mb-4"
+    th:id="${divId}"
+    >
+    <select
+        class="browser-default custom-select"
+        th:id="${id}"
+        th:name="${id}"
+        th:v-model="${model}"
+        th:@change="${onchange}"
+        >
+        <option
+            th:each="item, itemStat: ${list}"
+            th:value="${itemStat.index}"
+            th:text="${item}"
+            ></option>
+    </select>
+</div>
+
+<div
+    th:fragment="datetimepicker(label,id, divId,model,config,onchange)"
+    class="col-lg-6 col-md-6 mb-4"
+    th:id="${divId}"
+    >
+    <label for="form1" class=""><span th:text="${label}"></span></label>
+    <date-picker
+        type="text"
+        id="form1"
+        class="form-control"
+        th:v-model="${model}"
+        th::config="${config}"
+        th:@dp-change="${onchange}"
+        ></date-picker>
+
+
+</div>-->
+
+
+
+
+

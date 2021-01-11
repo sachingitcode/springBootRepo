@@ -1,0 +1,335 @@
+<div id="custOtherDetails">
+    <!--<div data-th-replace="fragments/text-field :: formHeader()"></div>-->
+    <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+        <v-layout wrap>
+            <v-col xs12 sm12 md12 lg12 xl12 class="text-sm-center pt-3">
+                <h2>Other Details </h2>
+            </v-col>
+            <v-flex xs12 sm12 md12 lg12 xl12></v-flex>
+
+        </v-layout>
+
+        <div class="container" height = "200">
+            <v-layout>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="mt-4">
+                    <label> Aadhar Image :</label>  
+                    <!--//enctype="multipart/form-data"-->
+                    <form method="POST" id="aadhar" name="aadhar" onsubmit="return submitForm(this.name);">      
+                        <v-icon>mdi-cloud-upload</v-icon>
+                        <input type="file" name="file" required />
+                        <v-btn>    <input type="submit" value="Submit" /></v-btn>
+                        <v-btn>  <input type = "reset" name = "reset"  value = "Reset" /> </v-btn>
+                    <v-btn style="display:none"   id ="aadharRslt" class=" ml-6"  color="green" > SuccessFully Updated<v-icon  dark  right  >  mdi-checkbox-marked-circle  </v-icon>     </v-btn>
+                    </form>
+                </v-flex>
+            </v-layout>
+            <v-layout>
+                <v-flex xs12 sm12 md12 lg12 xl12  class="mt-4">
+                    <label> Passport Image :</label>  
+                    <!--//enctype="multipart/form-data"-->
+                    <form method="POST" id="passport" name="passport" onsubmit="return submitForm(this.name);">      
+                        <v-icon>mdi-cloud-upload</v-icon>
+                        <input type="file" name="file" required />
+                        <v-btn>    <input type="submit" value="Submit" /></v-btn>
+                        <v-btn>  <input type = "reset" name = "reset"  value = "Reset" /> </v-btn>
+                       <v-btn style="display:none"   id ="passportRslt" class=" ml-6"  color="green" > SuccessFully Updated<v-icon  dark  right  >  mdi-checkbox-marked-circle  </v-icon>     </v-btn>
+                    </form>
+                </v-flex>
+            </v-layout>
+            <v-layout>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="mt-4">
+                    <label> Signature Image :</label>  
+                    <!--//enctype="multipart/form-data"-->
+                    <form method="POST" id="sign" name="sign" onsubmit="return submitForm(this.name);">      
+                        <v-icon>mdi-cloud-upload</v-icon>
+                        <input type="file" name="file" required />
+                        <v-btn>    <input type="submit" value="Submit" /></v-btn>
+                        <v-btn>  <input type = "reset" name = "reset"  value = "Reset" /> </v-btn>
+                          <v-btn style="display:none"   id ="signRslt" class=" ml-6"  color="green" > SuccessFully Updated<v-icon  dark  right  >  mdi-checkbox-marked-circle  </v-icon>     </v-btn>
+                    </form>
+                </v-flex>
+            </v-layout>
+            <v-layout>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="mt-4">
+                    <label> Pan Card Image :</label>  
+                    <!--//enctype="multipart/form-data"-->
+                    <form method="POST" id="panCard" name="panCard" onsubmit="return submitForm(this.name);">      
+                        <v-icon>mdi-cloud-upload</v-icon>
+                        <input :rules="userNameRules"   type="file" name="file" required />
+                        <v-btn>    <input type="submit" value="Submit" /></v-btn>
+                        <v-btn>  <input type = "reset" name = "reset"  value = "Reset" /> </v-btn>
+                        <v-btn style="display:none"   id ="panCardRslt" class=" ml-6"  color="green" > SuccessFully Updated<v-icon  dark  right  >  mdi-checkbox-marked-circle  </v-icon>     </v-btn>
+                   <!----> 
+                    </form>
+                </v-flex>
+            </v-layout>
+            <div data-th-replace="fragments/formelements.html :: footerbuttonsSave()"></div>
+        </div>
+    </v-container>
+
+
+
+
+
+</div>
+
+<script>
+     
+       function submitForm(fileHeader ) {
+              var fd = new FormData(document.getElementById(fileHeader));
+              fd.append("label", fileHeader);
+              $.ajax({
+                url: "uploadNew",
+                type: "POST",
+                data: fd,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false   // tell jQuery not to set contentType
+               }).done(function( data ) {
+                 $("#"+fileHeader+"Rslt").show();
+            });
+            return false;
+        }
+     
+//        function submitForm(fileHeader) {
+     
+    
+//     const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
+     var DropZoneOpt = {
+         url: "fileUpload",
+         thumbnailWidth: 150,
+         maxFilesize: 0.5,
+         maxFiles: 100,
+         headers: {"My-Awesome-Header": "header value"}
+     };
+     var allowedFileTypes = ".jpeg,.jpg,.png,.gif,.xls,.xlsx,.zip,.doc,.docx,.txt,.pdf,.Mp4,.Mkv,.Dav,.264,.Arf,.Avi,.MovAv";
+     //    Vue.component("vue-dropzone", vue2Dropzone);   
+//     let ListpagesId = "";
+
+    
+     new Vue({
+         el: '#custOtherDetails',
+         vuetify: new Vuetify(),
+         data() {
+             return {
+                 footerProps: {'items-per-page-options': [5, 10, 15, 30, 50, 100]},
+                 items: [],
+                 drawer: true,
+                 valid: true,
+                  userNameRules: [
+                            v => !!v || 'Field is required'],
+                 clipped: false,
+                 fileCount: 0,
+                 validUpload: false,
+                 search1: "",
+                 uploadedFiles: [],
+                 uploadError: null,
+                 currentStatus: null,
+                 uploadFieldName: 'photos',
+                 dialog1: false,
+                 dialog: false,
+                 clipped: false,
+                 fileCount: 0,
+                 validUpload: false,
+                 isSavedVal:false,
+                 doc_name: "",
+                 frontGraphValue: [0, 2, 5, 9, 5, 10, 3, 5, -4, -10, 1, 8, 2, 9, 0],
+                 headersUpload: [{text: "S.No", align: "left", sortable: false, "value": "pk"},
+                     {text: "Document Name", "value": "doc_name"},
+                     {text: "created_date", "value": "created_date"},
+                     {text: "Download", "value": "path"},
+                     {text: "Remove", "value": "path"}
+                 ],
+                 valuesUpload: [],
+//         
+                 color: 'teal',
+                 colors: [
+                     'primary',
+                     'blue',
+                     'success',
+                     'red',
+                     'teal',
+                 ],
+                 right: false,
+                 permanent: false,
+                 miniVariant: false,
+                 expandOnHover: false,
+                 background: false,
+             }
+         },
+         computed: {
+             bg() {
+                 return this.background ? 'https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg' : undefined
+             },
+
+             isInitial() {
+                 return this.currentStatus === STATUS_INITIAL;
+             },
+             isSaving() {
+
+//                 return this.currentStatus === STATUS_SAVING;
+                 return true;
+             },
+             isSuccess() {
+                 return this.currentStatus === STATUS_SUCCESS;
+             },
+             isFailed() {
+                 return this.currentStatus === STATUS_FAILED;
+             },
+             formTitle() {
+                 return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+             }
+
+         },
+         created() {
+             this.findById();
+             this.LoadMenu();
+         },
+         watch: {
+             dialog(val) {
+                 //            val || this.close()       //  removed
+             }
+         },
+
+         methods: {
+              Submit() {
+                  ListingPages("custPaytmDetails");
+                 
+//                axios.post('/saveCustomerData',     //saveCustomerData
+//                        {
+//                            "id": this.id,
+//                            "userData": this.userData,
+//                            "pageSno":'3'           // pre for prevous button , post for nexxt button ; it will tell controller which page to return       
+//                        })
+//                        .then(response => {
+////                            LoadForm(response.data);
+//                            ListingPages("custOtherDetails");
+//                    
+//                        })
+//                        .catch(e => {
+//                            alert("Error" + e);
+//                        })
+            },
+              moreVertclickHandler(i) {
+                 console.log("Index==>" + i);
+                 if (i === 1) {
+                     location.href = 'login'
+                 }
+             },
+             removeAllFiles: function () {
+                 this.$refs.myVueDropzone.removeAllFiles();
+             },
+             showError: function (file) {
+                 console.log("A file was successfully uploaded");
+             },
+             reset() {
+                 // reset form to initial state
+                 this.currentStatus = STATUS_INITIAL;
+                 this.uploadedFiles = [];
+                 this.uploadError = null;
+             },
+             download(url) {
+                 window.location.href = url;
+             },
+             save(formData) {
+                 // upload data to the server
+                 this.currentStatus = STATUS_SAVING;
+                 this.upload(formData)
+                         .then(x => {
+                             this.uploadedFiles = [].concat(x);
+                             this.currentStatus = STATUS_SUCCESS;
+                         })
+                         .catch(err => {
+                             this.uploadError = err.response;
+                             this.currentStatus = STATUS_FAILED;
+                         });
+             },
+             upload(formData) {
+                 const BASE_URL = 'http://localhost:8080';
+                 const url = `${BASE_URL}/files/upload`;
+                 return axios.post(url, formData)
+                         // get data
+                         .then(response => {
+                             if (response.data) {
+                                 this.doc_name = "";
+                                 this.findById();
+                             } else {
+                                 alert("Something went wrong");
+                             }
+                         }).catch(e => {
+                     alert("Error " + e);
+                     console.log("Error " + e);
+                 })  // add url field
+
+             },
+             filesChange(fieldName, fileList) {
+                 if (this.validUpload) {
+                     // handle file changes
+                     const formData = new FormData();
+                     if (!fileList.length)
+                         return;
+                     // append the files to FormData
+                     Array.from(Array(fileList.length).keys())
+                             .map(x => {
+                                 formData.append(fieldName, fileList[x], fileList[x].name);
+                             });
+                     formData.append("doc_name", this.doc_name);
+                     // save it
+                     this.save(formData);
+                 } else {
+                     alert("Please provide Document name !");
+                 }
+             }
+             ,
+             deleteFile(pk, path) {
+                 axios.get('/deleteIdUploadListing?pk=' + pk + "&path=" + path)
+                         .then(response => {
+                             if (response.data) {
+                                 this.findById();
+                             } else {
+                                 alert("Something went wrong");
+                             }
+                         }).catch(e => {
+                     alert("Error" + e);
+                     console.log("Error " + e);
+                 })
+             },
+             findById() {
+                 axios.get(`/findByIdUplaodListing`)
+                         .then(response => {
+                             this.valuesUpload = response.data;
+                         }).catch(e => {
+                     console.log("Error " + e);
+                 })
+             },
+         formSubmit(){
+             alert("SuccessFully Saved");
+         }
+
+         }
+
+     });
+    
+</script>
+
+
+<!--UPLOAD-->
+<!--  aadghar passport          <v-form ref="form" enctype="multipart/form-data" novalidate v-model="validUpload">
+                <h1>Upload</h1>
+                <v-layout>
+                    <v-flex xs12 sm12 md6 lg6 xl6>
+                        <v-text-field  :rules="[]" label="Document Name" v-model="doc_name"   value="passpsort"  > </v-text-field>
+                    </v-flex>
+                </v-layout>
+                <div class="dropbox">
+                    <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                           accept="image/*" class="input-file">
+                    <p>
+                        Drag your file(s) here to begin<br> or click to browse
+                    </p>
+                    <p v-if="isSaving">
+                        Uploading {{ fileCount }} files...
+                    </p>
+                </div>
+            </v-form>-->
+
+

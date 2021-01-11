@@ -1,0 +1,404 @@
+
+
+<v-app id="appli2">
+    <div data-th-replace="fragments/text-field :: formHeader()"></div>
+    <v-form ref="form" v-model="valid" lazy-validation>
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;"> 
+            <v-flex xs12 sm12 md12 lg12 xl12 class="v-label theme--light">
+                <h4>Details of marks in:</h4>
+            </v-flex>
+            <v-layout>
+                <template>
+                    <v-flex  xs12 sm12 md3 lg3 xl6></v-flex>
+                    <v-flex center xs12 sm12 md3 lg3 xl6 >
+                        <v-radio-group v-model="userData.radios"row>
+                            <v-radio label="Bsc Home Science (Pass/Hons)" value="radio-1"></v-radio>
+                            <v-radio label="Bsc (Hons)" value="radio-2"></v-radio>
+                            <v-radio label="Food Technology" value="radio-3"></v-radio>
+                            <v-radio label="Bsc Microbiology" value="radio-4"></v-radio>
+                            <v-radio label=" Bsc Biochemistry" value="radio-5"></v-radio>
+                            <v-radio label="Bsc Nursing" value="radio-6"></v-radio>
+                            <v-radio label="MBBS" value="radio-7"></v-radio>
+                        </v-radio-group>
+                    </v-flex>
+                </template>
+            </v-layout>
+            <br>
+            <v-layout wrap class="pt-10">
+                <v-flex xs12 sm12 md12 lg12 xl12  >
+                    <v-card>
+                        <v-card-title class="text-right">
+                            <v-btn icon color="green" @click="addRow">
+                                <v-icon color="white">add</v-icon>
+                            </v-btn>
+                            <v-btn icon color="red" @click="deleteRow">
+                                <v-icon color="white">remove</v-icon>
+                            </v-btn>
+                        </v-card-title>
+                        <table class="table table-bordered" width="100%">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" width="20%">Sl.
+                                        No</th>
+                                    <th rowspan="2" width="20%">Subject</th>
+                                    <th rowspan="2" width="20%">Year</th>
+                                    <th colspan="2" width="20%">Marks</th> 
+                                    <th rowspan="2" width="20%">Total</th>
+                                    <th rowspan="2" width="20%" >Total%</th>
+                                </tr>
+                                <tr>
+                                    <th width="20%">Max.Marks</th>
+                                    <th width="20%">Marks Obtained</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(input, index) in userData.oth_ret" :key="index">
+                                    <td>
+                                        {{index+1}}  
+                                    </td>
+                                    <td>
+                            <v-text-field placeholder="Subject" v-model="input.sub_name" :rules="[rules.required,rules.length]"></v-text-field>
+                            </td>
+                            <td>    <v-flex xs12 sm12 md9 lg9 xl6>
+                                <v-text-field  placeholder="YYYY" :counter="4" v-model="input.year" :rules="[rules.yearr,rules.yeard,rules.yeari,rules.number]"  required></v-text-field>
+                            </v-flex></td>
+                            <td>
+                            <v-text-field placeholder="Max.Marks" @change="maxmarks(index)" v-model="input.max_marks" :rules="[rules.required,rules.length,rules.number]"></v-text-field>
+                            </td>
+                            <td>
+                            <v-text-field placeholder="Marks Obtained" @change="obtmarks(index);perct(index);perc(index)" v-model="input.marks_obtai" :rules="[rules.required,rules.length,rules.number]"></v-text-field>
+                            </td>
+                            <td>
+                                <br>   
+                                <label  >{{input.perct}}</label> 
+                            </td>                         
+                            <td>
+                                <br>   
+                                <label  >{{input.perc}}</label> 
+                            </td>                         
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </v-card>
+                </v-flex>
+                <br>
+                <br> <div data-th-replace="fragments/text-field :: input6(label='Mention distinction in sports if any',model='userData.men',placeholder='',counter='',rules='[rules.required,rules.lengthp]')"></div>
+                <br>
+                <br>
+                <br>
+                <v-layout>
+                    <v-flex xs12 sm12 md12 lg12 xl12 class="v-label theme--light">
+                        <br>
+                        <h4>i declare that the particular given above are correct and i am applying for admission with the
+                            consent of my</h4>
+                    </v-flex>
+
+                    <v-flex xs12 sm6 md6 lg12 xl12>
+                        <v-radio-group v-model="userData.row" row>
+                            <v-radio label="Parent" value="radio-1"></v-radio>
+                            <v-radio label="Guardian" value="radio-2"></v-radio>
+                        </v-radio-group>
+                    </v-flex>   
+                </v-layout>
+                <v-layout>            
+
+                    <br>
+                    <br>
+
+                    <v-flex data-th-replace="fragments/text-field :: input6(label='Signature of the Applicant',model='userData.   stu_ofapp',placeholder='Signature of the Applicant',counter='',rules='[rules.required,rules.length]')"></v-flex>
+                </v-layout>
+
+                <v-layout>            
+                    <v-flex xs12 sm9 md9 lg12 xl6>
+                        <v-menu
+                            v-model="userData.menu"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px"
+                            >
+                            <template v-slot:activator="{ on }">
+                                <v-text-field
+                                    v-model="userData.date"
+                                    label="Dated"
+                                    prepend-icon="mdi-calender-today"
+                                    readonly
+                                    v-on="on"
+                                    ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="userData.date"  @input="userData.menu = false"></v-date-picker>
+                        </v-menu>              
+                        <v-spacer></v-spacer>
+                    </v-flex > 
+                </v-layout>
+                <br>
+                <br>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="v-label theme--light">
+                    <h4>I certify that the information given above is correct,I agree ti pay all fees in advance and
+                        the xvcv terms regulation stated in the Prospectus</h4>
+                </v-flex>
+                <br>
+                <br>
+                <br>
+                <v-layout>            
+
+                    <br>
+                    <br>
+
+                    <v-flex data-th-replace="fragments/text-field :: input6(label='Signature of the Parent/Guardian',model='userData.stu_of',placeholder='Signature of the Applicant',counter='',rules='[rules.required,rules.length]')"></v-flex>
+                </v-layout>
+                <v-layout>
+                    <v-flex xs12 sm9 md9 lg12 xl6>
+                        <v-menu
+                            v-model="userData.menu2"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px"
+                            >
+                            <template v-slot:activator="{ on }">
+                                <v-text-field
+                                    v-model="userData.date2"
+                                    label="Dated"
+                                    prepend-icon="mdi-calender-today"
+                                    readonly
+                                    v-on="on"
+                                    ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="userData.date2"  @input="userData.menu2 = false"></v-date-picker>
+                        </v-menu>              
+                        <v-spacer></v-spacer>
+                    </v-flex > 
+                </v-layout>
+                <br>
+                <br>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="v-label theme--light">
+                    <p>Note: The following documents should be attached to the application</p>
+                    <p>1.Self_attested copies of certificates of having passed the examination and statements of marks.</p>
+                    <p>2.Self-attested copy of Date of Birth Certificate if not given in (1) above.</p>
+                    <p>3.Certificate from the Principal of College last attended</p>
+                </v-flex>
+                <div th:replace="fragments/formelements.html :: footerbuttons()"></div>
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+
+
+<script th:inline="javascript">
+ 
+    var myObject =   new Vue({
+        el: "#appli2",
+        vuetify: new Vuetify(),
+        data: {
+            menu2: false,
+            loading: false,
+            title: /*[[${session.title}]]*/'',
+            search: null,
+            select: null,
+            menu: false,
+            valid: true,
+            date: '',
+
+            userData: {
+                radios: '',
+                stu_of: '',
+                par_g: '',
+                men: '',
+                stu_ofapp: '',
+                date: '',
+                date2: '',
+                oth_ret: [{
+                        sub_name: '',
+                        year: '',
+                        max_marks: '',
+                        marks_obtai: '',
+                        perc: '',
+                        perct: ''
+
+                    }],
+
+            },
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+            }
+        },
+        methods: {
+            CloseForm() {
+                CloseForm();
+//                $("#formcontainer").css("display", "none");
+//                $("#formContent").html("");
+            },
+            maxmarks(index) {
+
+                var marks = this.userData.oth_ret[index].max_marks;
+
+                if (marks != '') {
+                    if (marks > 100) {
+                        alert("Sorry....................");
+                        this.userData.oth_ret[index].max_marks = '';
+                    }
+                }
+            },
+            obtmarks(index) {
+
+                var obtmarks = this.userData.oth_ret[index].marks_obtai;
+                var maxmarks = this.userData.oth_ret[index].max_marks;
+
+                if (obtmarks != '') {
+                    if (obtmarks > maxmarks) {
+                        alert("Sorry....................");
+                        this.userData.oth_ret[index].marks_obtai = '';
+                    }
+                }
+            },
+            perct(index) {
+                var maxmark = parseInt(this.userData.oth_ret[index].max_marks);
+                var markobt = parseInt(this.userData.oth_ret[index].marks_obtai);
+
+                var perct = (markobt + maxmark);
+                this.userData.oth_ret[index].perct = perct;
+            },
+
+            perc(index) {
+                var maxmark = this.userData.oth_ret[index].max_marks;
+                var markobt = this.userData.oth_ret[index].marks_obtai;
+
+                var perc = (markobt / maxmark * 100).toFixed(2);
+                this.userData.oth_ret[index].perc = perc;
+           },
+
+            addRow() {
+                this.userData.oth_ret.push({
+                    sub_name: '',
+                    year: '',
+                    max_marks: '',
+                    marks_obtai: '',
+                    perc: '',
+                    perct: ''
+                })
+            },
+
+            deleteRow() {
+                var myData = this.userData.oth_ret;
+                if (myData.length > 1) {
+                    this.userData.oth_ret.splice(-1, 1)
+                }
+            },
+
+            NextSubmit() {
+                axios.post('/saveData', this.userData)
+                        .then(response => {
+                            if (response.data === true) {
+                                ApplyForm(1);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+
+            PreviousSubmit() {
+                LoadPrevForm();
+            },
+
+            Submit() {
+                var listpage = /*[[${session.listPages}]]*/;
+                
+                        axios.post('/saveData',
+                                {
+                                    "id": this.id,
+                                    "userData": this.userData
+                                })
+                        .then(response => {
+                            ListingPages(listpage);
+                        })
+                        .catch(e => {
+                            alert("Error " + e);
+                        })
+            },
+            
+            saveasDraft() {
+
+            }
+        },
+
+        created() {
+            axios.get('/findById')
+                    .then(response => {
+                        if (response.data != "")
+                        {
+                            this.userData = response.data.dt;
+                            this.id = response.data.id;
+                        }
+                    })
+                    .catch(e => {
+                        alert("Error" + e);
+                    })
+        }
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

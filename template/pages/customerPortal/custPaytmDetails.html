@@ -1,0 +1,130 @@
+
+<v-app id="custPaytmDetails">
+    <v-form ref="form" v-model="valid" >
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap>
+                <v-col xs12 sm12 md12 lg12 xl12 class="text-sm-center pt-3">
+                     <h2>Payment Details  </h2>
+                </v-col> 
+                 
+                <v-flex xs12 sm12 md12 lg12 xl12  class="mt-6">
+
+                    <div class="text-center">
+                        <v-dialog
+                            v-model="dialog"
+                            width="500"
+                            >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    color="red lighten-2"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    >
+                                    Click Here
+                                </v-btn>
+                            </template>
+
+                            <v-card>
+                                <v-card-title class="headline grey lighten-2">
+                                    Privacy Policy
+                                </v-card-title>
+
+                                <v-card-text>
+                                    The Payment is initiated via Paytm. Please Keep your Bank Details Handy.
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                     <v-btn 
+                                        color="green"
+                                        text
+                                        @click="dialog = false"
+                                        >
+                                        I accept
+                                    </v-btn>
+                                    <v-btn 
+                                        color="red"
+                                        text
+                                        @click="dialog = false"
+                                        >
+                                       Decline
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+<script>
+    new Vue({
+        el: "#custPaytmDetails",
+        vuetify: new Vuetify(),
+        data: {
+            title: /*[[${session.title}]]*/ '',
+             dialog: false,
+            userData: {
+                aadhar: '',
+                pan_card: '',
+                income_type: '',
+                salary_val: '',
+                monthly_expense: '',
+                epf_number: '',
+            },
+         
+        },
+        methods: {
+            reset() {
+                this.$refs.form.reset();
+            },
+            Submit() {
+                axios.post('/saveCustomerData',     //saveCustomerData
+                        {
+                            "id": this.id,
+                            "userData": this.userData,
+                            "pageSno":'2'           // pre for prevous button , post for nexxt button ; it will tell controller which page to return       
+                        })
+                        .then(response => {
+//                            LoadForm(response.data);
+                            ListingPages("custOtherDetails");
+                    
+                        })
+                        .catch(e => {
+                            alert("Error" + e);
+                        })
+            },
+  
+        created() {
+            axios.get('/findByCustomerId?pageSno=2')
+                    .then(response => {
+                        if (response.data != "")
+                        {
+                            this.id = response.data.id;
+                            this.userData = JSON. parse(response.data.dt);
+                        }
+                    })
+                    .catch(e => {
+                        alert("Error " + e);
+                    })
+        } 
+    }
+    }) ;
+</script>
+
+
+
+
+<!--            paytmBtn(){
+                                axios.get('/OnlinePaymentPaytmGateway')
+                        .then(response => {
+                            
+                            if (response.data === true) {
+//                                ListPages(/*[[${session.listPages}]]*/);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },-->

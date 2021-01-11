@@ -1,0 +1,156 @@
+<v-app id="custFnclDetails">
+    <!--<div data-th-replace="fragments/text-field :: formHeader()"></div>-->
+    <v-form ref="form" v-model="valid" >
+        <!--lazy-validation-->
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap>
+                <v-col xs12 sm12 md12 lg12 xl12 class="text-sm-center pt-3">
+                    <h2>Financial Details  </h2>
+                </v-col>
+                <v-flex xs12 sm12 md12 lg12 xl12></v-flex>
+                <div data-th-replace="fragments/text-field :: input6(label='Aadhar Card',model='userData.aadhar',placeholder='Entering',counter='12',rules='[rules.required ,rules.number,rules.lengthp ]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Pan Card',model='userData.pan_card',placeholder='',counter='10',rules='[rules.required ]')"> </div>
+                 <div data-th-replace="fragments/text-field :: input6(label='Monthly Expenses',model='userData.monthly_expense',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='EPF Number',model='userData.epf_number',placeholder='',counter='',rules='[]')"> </div>
+                
+                <div class="flex sm12 xs12 md12 lg12 xl6 xl6"> Income Type : <v-radio-group    v-model="userData.income_type" row>
+                        <v-radio label="Salaried"    value="1"></v-radio>
+                        <v-radio label="Self-Employed" value="2"></v-radio>
+                    </v-radio-group> 
+                </div>  
+                <div class="flex sm12 xs12 md12 lg12 xl6 xl6"> Salary :   <v-radio-group  v-model="userData.salary_val" row>
+                        <v-radio label="Below 3 Lakh" value="1"></v-radio>
+                        <v-radio label="3-6 Lakh" value="2"></v-radio>
+                        <v-radio label="6-12 Lakh" value="3"></v-radio>
+                        <v-radio label="Above 12 Lakh" value="4"></v-radio>
+                    </v-radio-group> 
+                </div> 
+               
+<!--                <v-layout>
+                    <v-flex xs12 sm6 md6>
+                        <br>
+                        <h4>Income Type</h4>
+                    </v-flex>
+                    <v-flex xs12 sm6 md6>
+                        <v-radio-group  v-model="userData.income_type" row>
+                            <v-radio label="Salaried" value="true"></v-radio>
+                            <v-radio label="Self-Employed" value="false"></v-radio>
+                        </v-radio-group>
+                    </v-flex>   
+                </v-layout>-->
+                 <div data-th-replace="fragments/formelements.html :: footerbuttonsSave()"></div>
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+<script>
+    new Vue({
+        el: "#custFnclDetails",
+        vuetify: new Vuetify(),
+        data: {
+            title: /*[[${session.title}]]*/ '',
+            loading: false,
+            search: null,
+            select: null,
+            valid: true,
+            menu9: false,
+            cat: false,
+            userData: {
+                aadhar: '',
+                pan_card: '',
+                income_type: '',
+                salary_val: '',
+                monthly_expense: '',
+                epf_number: '',
+            },
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 12) || 'Number must be 12 digits'
+            }
+        },
+        watch: {
+            search(val) {
+                val && val !== this.select && this.querySelections(val)
+            }
+        },
+        methods: {
+            CloseForm() {
+                CloseForm()
+//                $("#formcontainer").css("display", "none");
+//                $("#formContent").html("");
+//                $("#contentarea").css("display", "");
+            },
+
+            addRow() {
+                this.userData.ref_course.push({
+                    sub_name: '',
+                    max_marks: '',
+                    marks_obtai: '',
+                    perc: '',
+                })
+            },
+            deleteRow() {
+                var myData = this.userData.ref_course;
+                if (myData.length > 1) {
+                    this.userData.ref_course.splice(-1, 1)
+                }
+            },
+            reset() {
+                this.$refs.form.reset();
+            },
+            Submit() {
+                axios.post('/saveCustomerData',     //saveCustomerData
+                        {
+                            "id": this.id,
+                            "userData": this.userData,
+                            "pageSno":'2'           // pre for prevous button , post for nexxt button ; it will tell controller which page to return       
+                        })
+                        .then(response => {
+//                            LoadForm(response.data);
+                            ListingPages("custOtherDetails");
+                    
+                        })
+                        .catch(e => {
+                            alert("Error" + e);
+                        })
+            },
+  
+        created() {
+            axios.get('/findByCustomerId?pageSno=2')
+                    .then(response => {
+                        if (response.data != "")
+                        {
+                            this.id = response.data.id;
+                            this.userData = JSON. parse(response.data.dt);
+                        }
+                    })
+                    .catch(e => {
+                        alert("Error " + e);
+                    })
+        } 
+    }
+    }) ;
+</script>
+
+
+
+       
+<!--            paytmBtn(){
+                                axios.get('/OnlinePaymentPaytmGateway')
+                        .then(response => {
+                            
+                            if (response.data === true) {
+//                                ListPages(/*[[${session.listPages}]]*/);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },-->

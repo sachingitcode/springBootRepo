@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ILS</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" />
+
+        <!-- <link rel="stylesheet" href="static/plugins/vuetify/roboto.css"> -->
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="static/plugins/fontawesome/all.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="static/plugins/bootstrap/css/bootstrap.min.css">
+        <!-- Vuetify CSS -->
+        <link href="static/plugins/vuetify/vuetify.min.css" rel="stylesheet">
+
+        <!--color-->
+        <link href="static/plugins/color/color.min.css" rel="stylesheet">
+        <!-- Your custom styles (optional) -->
+        <style>
+            .intro {
+                display: flex;
+                justify-content: center;
+                margin: 4rem 0;
+            }
+
+            a {
+                color: inherit;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="appRoot">
+            <template>
+                <v-app>
+
+                    <!-- Sidebar navigation -->
+                    <div data-th-replace="fragments/navigation-drawer :: navigation-drawer"></div>
+                    <!--/. Sidebar navigation -->
+
+                    <!-- Navbar -->
+                    <div data-th-replace="fragments/toolbar :: toolbar"></div>
+                    <!-- /.Navbar -->
+
+                    <v-content>
+                        <v-container fluid>
+                            <section class="content">
+                                <div class="row">
+                                    <div class="col-md-12 h-100" id="contentarea" style="overflow-x: auto;overflow-y: auto">
+                                    </div>
+                                </div>
+                            </section>
+                        </v-container>
+
+                    </v-content>
+                    <!-- footer -->
+                    <div data-th-replace="fragments/footer :: footer"></div>
+                    <!-- footer -->
+
+                </v-app>
+            </template>
+                   <el-form-item label="Activity time">
+                    <el-col :span="11">
+                        <el-date-picker type="date" placeholder="Pick a date" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="11">
+                        <el-time-picker placeholder="Pick a time" v-model="form.date2" style="width: 100%;"></el-time-picker>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="Instant delivery">
+                    <el-switch v-model="form.delivery"></el-switch>
+                </el-form-item>
+                <el-form-item label="Activity type">
+                    <el-checkbox-group v-model="form.type">
+                        <el-checkbox label="Online activities" name="type"></el-checkbox>
+                        <el-checkbox label="Promotion activities" name="type"></el-checkbox>
+                        <el-checkbox label="Offline activities" name="type"></el-checkbox>
+                        <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="Resources">
+                    <el-radio-group v-model="form.resource">
+                        <el-radio label="Sponsor"></el-radio>
+                        <el-radio label="Venue"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="Activity form">
+                    <el-input type="textarea" v-model="form.desc"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">Create</el-button>
+                    <el-button>Cancel</el-button>
+                </el-form-item>
+        </div>
+
+          <el-row :gutter="10">
+                    <el-col :xs="8" :sm="12" :md="12" :lg="12" :xl="6" > 
+                        <el-form-item label="From(Stage)" prop="name">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item></el-col>
+                    <el-col :xs="8" :sm="12" :md="12" :lg="12" :xl="6">
+                        <el-form-item label="To(Stage)" prop="name">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item></el-col>
+                </el-row>
+        
+        
+
+        <!-- SCRIPTS -->
+        <!-- JQuery -->
+        <script src="static/plugins/jquery/jquery-3.3.1.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="static/plugins/popper/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="static/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.js"></script>
+
+        <!-- vue js -->
+        <script src="static/plugins/vue/vue.js"></script>
+        <script src="static/plugins/axios/axios.js"></script>
+
+        <!-- Vuetify -->
+        <script type="text/javascript" src="static/plugins/vuetify/vuetify.js"></script>
+
+        <!-- moment -->
+        <script src="/static/plugins/moment/moment-with-locales.min.js"></script>
+
+        <!-- vue-dropzone -->
+        <link href="static/plugins/dropzone/vue2Dropzone.min.css" rel="stylesheet" />
+        <script src="static/plugins/dropzone/vue2Dropzone.js"></script>
+
+        <script>
+
+
+            var DropZoneOpt = {
+                url: "fileUpload",
+                thumbnailWidth: 150,
+                maxFilesize: 0.5,
+                maxFiles: 100,
+                headers: {
+                    "My-Awesome-Header": "header value"
+                }
+                //   previewTemplate: this.template(),
+            };
+
+            var allowedFileTypes =
+                    ".jpeg,.jpg,.png,.gif,.xls,.xlsx,.zip,.doc,.docx,.txt,.pdf,.Mp4,.Mkv,.Dav,.264,.Arf,.Avi,.MovAv";
+
+            // const UserInfo = () => import('/static/vue2Dropzone.js');
+
+
+            Vue.component("vue-dropzone", vue2Dropzone);
+
+            new Vue({
+                el: '#appRoot',
+                data: {
+                    clipped: false,
+                    drawer: false,
+                    items: [{
+                            href: 'home',
+                            router: true,
+                            title: 'Home',
+                            icon: 'home',
+                        }, {
+                            href: 'examples',
+                            router: true,
+                            title: 'Example',
+                            icon: 'extension',
+                        }, {
+                            href: 'about',
+                            router: true,
+                            title: 'About',
+                            icon: 'domain',
+                        }],
+                },
+                methods: {
+                    loadForm() {
+                        // alert('fsd');
+                        // $('#mainDiv').load('index3.html');
+                    }
+                },
+            });
+
+
+
+
+
+            $(function () {
+                //            loadForm("pages/application/addApplication8");
+            });
+
+            //load URL in particular content
+            function loadForm(id) {
+                $("#contentarea").load("loadPages?id=" + encodeURIComponent(id));
+            }
+
+            //remove double quot(") from string
+            function removeQuot(str) {
+                var i = 0, length = str.length;
+                for (i; i < length; i++) {
+                    str = str.replace('"', '');
+                }
+                return str;
+            }
+        </script>
+
+
+
+    </body>
+
+</html>
+
+
+
+
+
+
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
+        </dependency>
+  <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <type>jar</type>
+        </dependency>

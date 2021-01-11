@@ -1,0 +1,46 @@
+
+
+RoleChanges 
+
+
+2 : 
+mysql> INSERT INTO `PAGE_MASTER`(`pk`, `link_name`, `url`, `description`, `id`, `addform`, `main_menu`, `sub_menu`, `icon`) VALUES (1, 'Apply1', 'apply', 'apply', '1', 'addApplication1', 'Masters', NULL, 'local_activity');
+ERROR 1054 (42S22): Unknown column 'addform' in 'field list'
+
+
+mysql> desc PAGE_MASTER ;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| pk          | int          | NO   | PRI | NULL    | auto_increment |
+| link_name   | varchar(255) | YES  |     | NULL    |                |
+| url         | varchar(255) | YES  |     | NULL    |                |
+| description | varchar(255) | YES  |     | NULL    |                |
+| id          | varchar(255) | YES  |     | NULL    |                |
+| applyform   | varchar(255) | YES  |     | NULL    |                |
+| main_menu   | varchar(255) | YES  |     | NULL    |                |
+| sub_menu    | varchar(255) | YES  |     | NULL    |                |
+| icon        | varchar(255) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+
+::::::::   mysql> alter table PAGE_MASTER rename COLUMN applyform to addform ;           ( as  addform is in project  ) 
+ 
+**** 
+Anyonr can directly login in by   http://localhost:8080/home    ;; make a session on starting
+ 
+pages/layout --> pages/homePage   
+ 
+**** Above nodification BAr can have Boxs Fields are Notification , Tasks, Calender and Other Use Ful activities
+ 
+string to obeject JSON.Parse ( respose.data.dt) ;
+
+
+
+
+ADD :: alter table T2 add constraint RIdT2 Unique Key (r_id) ;
+      SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+      
+      
+

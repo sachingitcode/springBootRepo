@@ -1,0 +1,133 @@
+<v-toolbar
+    data-th-fragment="toolbar"
+    color="blue en-4"
+    
+    fixed
+    app
+    clipped-right
+    >
+    <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar-title> Fagmant.ToolbarHtml</v-toolbar-title>
+
+    <v-spacer></v-spacer>
+<!--    <div id="google_translate_element">
+          <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+            }
+        </script>
+
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>   
+
+        
+    </div>-->
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <template v-slot:activator="{ on }">
+            <v-btn  icon v-on="on">
+                <v-icon >cloud_upload</v-icon>
+            </v-btn>
+        </template>
+        <v-card>
+            <v-toolbar  color="primary">
+                <v-btn icon  @click="dialog = false">
+                    <v-icon>close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Upload Document</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                </v-toolbar-items>
+            </v-toolbar>
+            <div class="container">
+
+                <!--UPLOAD-->
+                <v-form ref="form" enctype="multipart/form-data" novalidate v-model="validUpload">
+                    <h1>Upload</h1>
+                    <v-layout>
+                        <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-text-field  :rules="[rules.required,rules.length]" label="Document Name" v-model="doc_name" required></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <div class="dropbox">
+                        <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                               accept="image/*" class="input-file">
+                               <p>
+                            Drag your file(s) here to begin<br> or click to browse
+                        </p>
+                        <p v-if="isSaving">
+                            Uploading {{ fileCount }} files...
+                        </p>
+                    </div>
+                </v-form>
+            </div>
+            <br>
+            <br>
+            <br>
+
+            <v-card>
+                <v-card-title>
+                    <v-spacer></v-spacer>         
+                    <v-spacer></v-spacer>
+                    <v-text-field v-model="search1"
+                                  append-icon="search"
+                                  label="Search"
+                                  single-line
+                                  hide-details>
+
+
+                    </v-text-field>
+                </v-card-title>
+                <v-data-table
+                    :headers="headersUpload"
+                    :items="valuesUpload"
+                    :search="search1"
+                    >
+                    <template slot="items" slot-scope="props">    
+                        <!--<td>{{ props.index+1 }}</td>-->
+                        <td class="text-xs">{{ props.index+1 }}</td>
+                        <td class="text-xs">{{ props.item.doc_name }}</td>
+                        <td class="text-xs">{{ props.item.created_date }}</td>
+                        <td><v-btn depressed small  color="success" @click="download(props.item.path)" >Download</v-btn></td>
+                        <td><v-btn depressed small  color="error" @click="deleteFile(props.item.pk,props.item.path)">Remove</v-btn></td>
+                        <!--<td> <a th:href="@{/upload/Screenshot from 2018-11-22 16-58-02.png}">button</a>-->
+                        </td>    
+                    </template>
+                </v-data-table>
+            </v-card>
+            <!--
+            -->        </v-card>
+    </v-dialog>
+
+    <v-menu bottom left>
+
+        <template v-slot:activator="{ on }">
+            <v-btn  icon v-on="on">
+                <v-icon>more_vert</v-icon>
+            </v-btn>
+        </template>
+        <v-list>
+            <v-list-tile v-for="(item, i) in items1" :key="i" @click="moreVertclickHandler(i)">
+                <v-list-tile-avatar>
+                    <v-icon>{{ item.icon }}</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile-content>
+
+            </v-list-tile>
+        </v-list>
+    </v-menu>
+</v-toolbar>
+
+<!--
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>   -->
+
+
+
+
+

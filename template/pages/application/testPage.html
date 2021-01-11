@@ -1,0 +1,187 @@
+
+<v-app id="addAfghjpplication2">
+    <div data-th-replace="fragments/text-field :: formHeader()"></div>
+    <v-form ref="form" v-model="valid" lazy-validation>
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap class="pt-10">
+
+
+                <v-flex data-th-replace="fragments/text-field :: input6(label='NAme ',model='userData.name',placeholder='userData Name',counter='',rules='[rules.required,rules.length]')"></v-flex>
+                <v-flex data-th-replace="fragments/text-field :: input6(label='Tax',model='userData.tax',placeholder='tax',counter='',rules='[rules.required,rules.length]')"></v-flex>
+
+
+
+                <div th:replace="fragments/formelements.html :: footerbuttons()"></div>
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#addAfghjpplication2",
+           vuetify: new Vuetify(),
+        data: {loading: false,
+            title: /*[[${session.title}]]*/'',
+            search: null,
+            select: null,
+            menu: false,
+            valid: true,
+            date: '',
+            id: /*[[${id}]]*/'', // it can be session ,first chck it
+            userData: {
+                name: '',
+                tax: '',
+                
+            },
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits',
+            },
+        },
+        methods: {
+            CloseForm() {
+                CloseForm();
+            },
+            addRow() {
+                this.userData.oth_ret.push({
+                    details: '',
+                })
+            },
+            deleteRow() {
+                var myData = this.userData.oth_ret;
+                if (myData.length > 1) {
+                    this.userData.oth_ret.splice(-1, 1)
+                }
+            },
+            check() {
+                console.log('data==>>');
+                var myData = this.inputs;
+                for (var i in myData) {
+                    console.log(myData[i].one);
+                }
+            },
+            validate() {
+                if (this.$refs.form.validate()) {
+                    this.snackbar = true
+                }
+            },
+            reset() {
+                this.$refs.form.reset()
+            },
+            NextSubmit() {
+
+                axios.post('/saveData',
+                        {
+                            "id": this.id,
+                            "userData": this.userData
+                        })
+                        .then(response => {
+                            LoadForm(response.data);
+                            //                            if (response.data === true) {  
+                            //                                ApplyForm(1);
+                            //                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+            PreviousSubmit() {
+                LoadPrevForm();
+            },
+            Submit() {
+                axios.post('/saveTestData', {"userData": this.userData})
+                        .then(response => {
+                            if (response.data === true) {
+//                                ListPages(/*[[${session.listPages}]]*/);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+            saveasDraft() {
+
+
+            },
+            HandlePrevious() {
+
+            }
+
+        },
+
+        created() {
+
+
+//            axios.get('/findById')
+//                    .then(response => {
+//                        if (response.data != "")
+//                        {
+//                            this.userData = response.data.dt;
+//                            this.id = response.data.id;
+//                        }
+//                    })
+//                    .catch(e => {
+//                        alert("Error" + e);
+//                    })
+        }
+
+
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

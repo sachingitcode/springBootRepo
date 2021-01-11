@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<!--<html>       22DEC -->  
+
+
+<html xmlns:th="https://www.thymeleaf.org"    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue2-dropzone@3.6.0/dist/vue2Dropzone.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script  src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
+
+    </head>
+    <body>
+        <div id="homePage"   style ="margin-top:1px">
+            <v-app  class="ma-2" >  
+                <!-- Upper bar Drawer  -->
+                <v-app-bar            
+                    app
+                    color="indigo"
+                    dark
+                    class="ma-1"
+                    >           
+                    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                    <v-toolbar-title>Code Wings</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon  @click.stop="background = !background"  >
+                        <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+                        <template v-slot:activator="{ on }">
+                            <v-btn dark icon v-on="on">
+                                <v-icon>mdi-cloud-upload</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-card>
+                            <v-toolbar dark color="primary">
+                                <v-btn icon dark @click="dialog = false">
+                                    <v-icon>mdi-cancel</v-icon>
+                                </v-btn>
+                                <v-toolbar-title>Upload Document</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                            </v-toolbar>
+                            <div class="container" height = "200">
+                                <!--UPLOAD-->
+                                <v-form ref="form" enctype="multipart/form-data" novalidate v-model="validUpload">
+                                    <h1>Upload</h1>
+                                    <v-layout>
+                                        <v-flex xs12 sm12 md6 lg6 xl6>
+                                            <v-text-field  :rules="[]" label="Document Name" v-model="doc_name"  ></v-text-field>
+                                        </v-flex>
+                                    </v-layout>
+                                    <div class="dropbox">
+                                        <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                                               accept="image/*" class="input-file">
+                                        <p>
+                                            Drag your file(s) here to begin<br> or click to browse
+                                        </p>
+                                        <p v-if="isSaving">
+                                            Uploading {{ fileCount }} files...
+                                        </p>
+                                    </div>
+                                </v-form>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+
+                            <v-card>
+                                <v-card-title>
+                                    <v-spacer></v-spacer>         
+                                    <v-spacer></v-spacer>
+                                    <v-text-field v-model="search1"
+                                                  append-icon="mdi-search"
+                                                  label="Search"
+                                                  single-line
+                                                  hide-details>
+
+                                    </v-text-field>
+                                </v-card-title>
+                                <v-data-table
+                                    :headers="headersUpload"
+                                    :items="valuesUpload"
+                                    :search="search1"
+                                    >
+                                    <template slot="items" slot-scope="props">    
+                                        <!--<td>{{ props.index+1 }}</td>-->
+                                        <td class="text-xs">{{ props.index+1 }}</td>
+                                        <td class="text-xs">{{ props.item.doc_name }}</td>
+                                        <td class="text-xs">{{ props.item.created_date }}</td>
+                                        <td><v-btn  small  color="success" @click="download(props.item.path)" >  <v-icon fab dark color="primary">mdi-plus</v-icon></v-btn></td>
+                                        <td><v-btn  small  color="error" @click="deleteFile(props.item.pk,props.item.path)">    <v-icon fab dark color="primary">mdi-pencil</v-icon> </v-btn></td>
+                                    </template>
+                                </v-data-table>
+                            </v-card>
+                        </v-card>
+                    </v-dialog>
+                </v-app-bar>
+
+                
+                
+<!--                <v-menu bottom left >
+                      <template v-slot:activator="{ on }">
+                        <v-btn dark icon v-on="on">
+                            <v-icon>mdi-home</v-icon>
+                        </v-btn>
+                    </template>    
+                    <v-list>
+                        <v-list-item v-for="(item, i) in items1" :key="i" @click="moreVertclickHandler(i)">
+                            <v-list-item-avatar>
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>{{ item.title }}</v-list-tile-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>-->
+
+                 <!-- Side Navigation Drawer With Master Menues -->
+                <v-navigation-drawer   
+                    fixed
+                    v-model="drawer"
+                    :color="color"
+                    :expand-on-hover="expandOnHover"
+                    :src="bg"
+                    app
+                    dark
+                    > 
+                    <v-list class="pa-0">
+                        <v-list-item link>
+                            <v-list-item-avatar>
+                                <img src="pages/static/images/userPic.jpg">
+                            </v-list-item-avatar>   
+                            <v-list-item-content>
+                                <v-list-item-title>Sachin</v-list-item-title>
+                                <v-list-item-subtitle>Admin</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                    <v-divider></v-divider>
+
+                    <v-list>
+                        <v-list-group
+                            v-for="item in items"
+                            :key="item.title"
+                            v-model="item.active"
+                            :prepend-icon="item.action"
+                            no-action
+                            >
+                            <template v-slot:activator>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{item.title }}</v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template>
+                            <v-list-item
+                                v-for="subItem in item.items"
+                                :key="subItem.title"
+                                @click="ListPages(subItem.url)"
+                                >
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ subItem.title }}</v-list-item-title>
+                                </v-list-item-content>
+                                <v-list-item-action>
+                                    <v-icon>{{ subItem.action }}</v-icon>
+                                </v-list-item-action>
+                            </v-list-item>
+                        </v-list-group>
+                    </v-list>
+                    <template v-slot:append>
+                        <div class="">
+                            <v-form  ref="form" v-model="valid"  lazy-validation name='f' th:action="@{/logout}" method='POST'>
+                                <v-btn  value ="submit" type="submit"  block>Logout</v-btn>
+                            </v-form>
+                            <!--<v-btn @click="logoutMain()"  block>Logout</v-btn>-->
+                        </div>
+                    </template>
+                </v-navigation-drawer> 
+
+   
+                 <!--Main  center display  -->
+                <v-main absolute>
+                    <v-system-bar dark color="">
+                        <marquee>This Site is Under Development <v-icon> mdi-camera-iris</v-icon>  </marquee>
+                    </v-system-bar>
+
+                    <div id="formcontainer" style="display:none;">  
+                        <div id="formContent">
+                        </div>
+                    </div>
+                    <div  id="contentarea" > 
+                        <div data-th-replace="fragments/frontpage :: frontpage"> </div>
+                        <v-footer color="grey darken-2  " fixed class="justify-center pl-2 white--text"   >
+                            <span>Yadav & Co. &copy; 2020</span>
+                        </v-footer>            <!--use css footer--> 
+                    </div>
+
+                </v-main> 
+            </v-app>
+        </div>
+
+
+
+        <script>
+
+     const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
+     var DropZoneOpt = {
+         url: "fileUpload",
+         thumbnailWidth: 150,
+         maxFilesize: 0.5,
+         maxFiles: 100,
+         headers: {"My-Awesome-Header": "header value"}
+     };
+     var allowedFileTypes = ".jpeg,.jpg,.png,.gif,.xls,.xlsx,.zip,.doc,.docx,.txt,.pdf,.Mp4,.Mkv,.Dav,.264,.Arf,.Avi,.MovAv";
+     //    Vue.component("vue-dropzone", vue2Dropzone);   
+     let ListpagesId = "";
+
+
+
+     new Vue({
+         el: '#homePage',
+         vuetify: new Vuetify(),
+         data() {
+             return {
+                 footerProps: {'items-per-page-options': [5, 10, 15, 30, 50, 100]},
+                 items: [],
+                 drawer: true,
+                 dialog: false,
+                 clipped: false,
+                 fileCount: 0,
+                 validUpload: false,
+                 search1: "",
+                 uploadedFiles: [],
+                 uploadError: null,
+                 currentStatus: null,
+                 uploadFieldName: 'photos',
+                 dialog1: false,
+                 dialog: false,
+                 clipped: false,
+                 fileCount: 0,
+                 validUpload: false,
+                 doc_name: "",
+                 frontGraphValue: [0, 2, 5, 9, 5, 10, 3, 5, -4, -10, 1, 8, 2, 9, 0],
+                 headersUpload: [{text: "S.No", align: "left", sortable: false, "value": "pk"},
+                     {text: "Document Name", "value": "doc_name"},
+                     {text: "created_date", "value": "created_date"},
+                     {text: "Download", "value": "path"},
+                     {text: "Remove", "value": "path"}
+                 ],
+                 valuesUpload: [],
+                 rules: {
+                     required: v => !!v || 'Field is required',
+                     between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                     length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                     number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                     yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                     yearr: v => !!v || 'Year is required',
+                     yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                     email: v => /.+@.+/.test(v) || 'E-mail must be valid',
+                     lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+                 },
+                 //            items: [
+                 //                {title: 'Dashboard', action: 'mdi-view-dashboard'},
+                 //                {title: 'Home', action: 'mdi-home'},
+                 //                {title: 'Photos', action: 'mdi-image'},
+                 //                {title: 'Contact', action: 'mdi-email'},
+                 //                {title: 'Suggestions', action: 'fa-address-book'},
+                 //                {title: 'About', action: 'mdi-help-box'},
+                 //            ],
+                 items1: [{
+                         href: 'home',
+                         router: true,
+                         title: 'Home',
+                         icon: 'home',
+                     }, {
+                         href: 'examples',
+                         router: true,
+                         title: 'Logout',
+                         icon: 'logout',
+                     }],
+
+                 color: 'teal',
+                 colors: [
+                     'primary',
+                     'blue',
+                     'success',
+                     'red',
+                     'teal',
+                 ],
+                 right: false,
+                 permanent: false,
+                 miniVariant: false,
+                 expandOnHover: false,
+                 background: false,
+             }
+         },
+         computed: {
+             bg() {
+                 return this.background ? 'https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg' : undefined
+             },
+
+             isInitial() {
+                 return this.currentStatus === STATUS_INITIAL;
+             },
+             isSaving() {
+
+                 return this.currentStatus === STATUS_SAVING;
+             },
+             isSuccess() {
+                 return this.currentStatus === STATUS_SUCCESS;
+             },
+             isFailed() {
+                 return this.currentStatus === STATUS_FAILED;
+             },
+             formTitle() {
+                 return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+             }
+
+         },
+         created() {
+             this.findById();
+             this.LoadMenu();
+         },
+         watch: {
+             dialog(val) {
+                 //            val || this.close()       //  removed
+             }
+         },
+
+         methods: {
+              logoutMain() {
+                 window.location.href = 'logoutSuccessful';
+       },
+       
+             //        ListPages(id) {
+             //            $("#contentarea").load("listPages?id=" + encodeURIComponent(id));
+             //        },
+             moreVertclickHandler(i) {
+                 console.log("Index==>" + i);
+                 if (i === 1) {
+                     location.href = 'login'
+                 }
+             },
+             removeAllFiles: function () {
+                 this.$refs.myVueDropzone.removeAllFiles();
+             },
+             showError: function (file) {
+                 console.log("A file was successfully uploaded");
+             },
+             reset() {
+                 // reset form to initial state
+                 this.currentStatus = STATUS_INITIAL;
+                 this.uploadedFiles = [];
+                 this.uploadError = null;
+             },
+             download(url) {
+                 window.location.href = url;
+             },
+             save(formData) {
+                 // upload data to the server
+                 this.currentStatus = STATUS_SAVING;
+                 this.upload(formData)
+                         .then(x => {
+                             this.uploadedFiles = [].concat(x);
+                             this.currentStatus = STATUS_SUCCESS;
+                         })
+                         .catch(err => {
+                             this.uploadError = err.response;
+                             this.currentStatus = STATUS_FAILED;
+                         });
+             },
+             upload(formData) {
+                 const BASE_URL = 'http://localhost:8080';
+                 const url = `${BASE_URL}/files/upload`;
+                 return axios.post(url, formData)
+                         // get data
+                         .then(response => {
+                             if (response.data) {
+                                 this.doc_name = "";
+                                 this.findById();
+                             } else {
+                                 alert("Something went wrong");
+                             }
+                         }).catch(e => {
+                     alert("Error " + e);
+                     console.log("Error " + e);
+                 })  // add url field
+
+             },
+             filesChange(fieldName, fileList) {
+                 if (this.validUpload) {
+                     // handle file changes
+                     const formData = new FormData();
+                     if (!fileList.length)
+                         return;
+                     // append the files to FormData
+                     Array.from(Array(fileList.length).keys())
+                             .map(x => {
+                                 formData.append(fieldName, fileList[x], fileList[x].name);
+                             });
+                     formData.append("doc_name", this.doc_name);
+                     // save it
+                     this.save(formData);
+                 } else {
+                     alert("Please provide Document name !");
+                 }
+             }
+             ,
+             deleteFile(pk, path) {
+                 axios.get('/deleteIdUploadListing?pk=' + pk + "&path=" + path)
+                         .then(response => {
+                             if (response.data) {
+                                 this.findById();
+                             } else {
+                                 alert("Something went wrong");
+                             }
+                         }).catch(e => {
+                     alert("Error" + e);
+                     console.log("Error " + e);
+                 })
+             },
+             findById() {
+                 axios.get(`/findByIdUplaodListing`)
+                         .then(response => {
+                             this.valuesUpload = response.data;
+                         }).catch(e => {
+                     console.log("Error " + e);
+                 })
+             },
+             LoadMenu() {     //side Navigation BarSS
+                 axios.get('/commonQuery?id=ba98b760-806b-11e9-8557-8c89a53bcce4'
+                         ).then(response => {
+                     this.items = response.data;
+                 })
+                         .catch(e => {
+                             alert("Error");
+                         })
+             },
+             ListPages(id) {
+                 ListpagesId = id;
+                 $("#formcontainer").css("display", "none");
+                 $("#contentarea").css("display", "");
+                 $("#contentarea").html("");
+                 $("#contentarea").load("listPages?id=" + id);
+             }
+             ,
+             LoadForm(id) {
+                 $("#formContent").load("loadPages?id=" + id);
+             }
+
+         }
+
+     });
+
+
+     ///  JS function of other Pages 
+
+     function LoadForm(id) {
+         $("#formContent").load("loadPages?id=" + id);
+     }
+
+     function ListingPages(id) {    //name chng as it Listpages is above
+         $("#formcontainer").css("display", "none");
+         $("#contentarea").css("display", "");
+         $("#contentarea").html("");
+         $("#contentarea").load("listPages?id=" + id);
+     }
+
+     //$(function () {   loadForm("applicationHome");});
+
+     function ApplyForm(id) {
+         $("#formcontainer").css("display", "");
+         axios.get('/resetLoadForm?id=' + id).then(response => {
+             $("#formContent").load("loadPages?id=" + id);
+             $("#contentarea").css("display", "none");
+         }).catch(e => {
+             alert("Error");
+         })
+     }
+
+
+     //remove double quot(") from string
+     function removeQuot(str) {
+         var i = 0, length = str.length;
+         for (i; i < length; i++) {
+             str = str.replace('"', '');
+         }
+         return str;
+     }
+
+     //function ApplyFormEdit(id) {     // combine with ApplyForm   // only applyForm works  // its dummy
+     //    axios.get('/addEditcheckerValue?id=' + id)
+     //            .then(response => {
+     //                $("#contentarea").load("loadPages?id=" + id);
+     //            }).catch(e => {
+     //        console.log("Error " + e);
+     //    })
+     //}
+
+     function LoadPrevForm(id) {
+         $("#contentarea").load("loadPrevForm?id=" + encodeURIComponent(id));
+     }
+
+     function CloseForm() {
+         $("#formcontainer").css("display", "none");
+         $("#formContent").html("");
+         ListingPages(ListpagesId);
+     }
+
+     function     pausecomp(millis) {
+         var date = new Date();
+         var curDate = null;
+         do {
+             curDate = new Date();
+         } while (curDate - date < millis);
+     }
+
+
+        </script>
+    </body>
+</html>
+
+
+ 
+
+<!--      
+     
+                    <v-row justify="space-around">
+                        <v-switch
+                            v-model="background"
+                            class="ma-2"
+                            label="Background"
+                            ></v-switch>
+                      
+                    </v-row>
+
+<v-navigation-drawer         v-model="drawer"
+
+
+
+
+fixed
+app
+dark
+color="grey darken-4"
+ >
+
+
+ v-model="drawer"
+:color="color"
+:expand-on-hover="expandOnHover"
+:mini-variant="miniVariant"
+:right="right"
+:permanent="permanent"
+:src="bg"
+absolute
+dark
+<v-list dense>
+                            <v-list-item link>
+                                <v-list-item-action>
+                                    <v-icon>mdi-home</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                    <v-list-item-title>Home</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item link>
+                                <v-list-item-action>
+                                    <v-icon>mdi-email</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                    <v-list-item-title>Contact</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item link>
+                                <v-list-item-action>
+                                    <v-icon>mdi-lifebuoy</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                    <v-list-item-title>About Us</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item link>
+                                <v-list-item-action>
+                                    <v-icon>fa-address-book</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                    <v-list-item-title>Inquiry</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>  -->
+

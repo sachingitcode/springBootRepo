@@ -1,0 +1,210 @@
+<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>  
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.4.3/vue-router.js" integrity="sha512-3y+1622sE9JcYGIob4bKvJI6qMHpzrsloehokHVZBk1Lx7lr7H5p6IOqIkRQzB0Ids5l11W3n+vK50xArypH5g==" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script  src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.3.9/vuetify.min.js"></script>
+<script type="text/javascript" src="static/plugins/vuetify/vuetify.js"></script>-->
+
+<!--<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue2-dropzone@3.6.0/dist/vue2Dropzone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script  src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
+</head>-->
+<div id="formDescriptionPage">
+    <v-app>
+        <div   style="color:red; height: 50px;" >
+            <v-toolbar flat class="grey lighten-3">
+                <v-toolbar-title>
+                    {{title}}
+                </v-toolbar-title>
+                <v-spacer> </v-spacer>
+                <v-btn color="primary"  class="mb-2 flat" @Click="Loadform"><v-icon>mdi-plus</v-icon> New Item</v-btn>
+            </v-toolbar>
+        </div>
+        <div  style="color:red; height: 50px;" >
+            <v-card data-th-replace="fragments/formelements.html :: dataTablesList()">
+            </v-card>
+        </div>
+    </v-app>
+</div>
+
+<script type="text/javascript">
+
+new Vue({
+    el: '#formDescriptionPage',
+    vuetify: new Vuetify(),
+    data: {
+        editedIndex: -1,
+        title: "New Detailed Form ",
+        breadcrumb: [
+            {
+                text: 'Dashboard',
+                disabled: true,
+                href: '#'
+            },
+            {
+                text: 'Link 1',
+                disabled: true,
+                href: '#'
+            },
+            {
+                text: 'Link 2',
+                disabled: true,
+                href: '#'
+            }
+        ],
+//        footerProps: {'items-per-page-options': [10, 15, 30, 50, 100]},
+        dialog: false,
+        search: '',
+        headers: [],
+        values: [],
+        editedItem: {
+            name: '',
+            calories: 0,
+            fat: 0,
+            carbs: 0,
+            protein: 0
+        },
+        defaultItem: {
+            name: '',
+            calories: 0,
+            fat: 0,
+            carbs: 0,
+            protein: 0
+        }
+    },
+    props: {
+        source: String
+    },
+        watch: {
+            dialog(val) {
+                val || this.close()
+            }
+        }
+        ,
+        created() {
+           console.log("It Created") ;
+            this.initialize()
+
+        },
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        }
+    },
+    methods: {
+        Loadform() {
+            ApplyForm(0);
+        },
+
+        getItemPerPage(val) {    // to be Remove
+            console.log(val);
+        },
+
+        initialize() {
+            axios.get(`/findByIdListing`)
+                    .then(response => {
+                        this.limit = response.data.header.length - 1;
+                        this.headers = response.data.header;
+                        props: {
+                            source: String
+                        }
+                        this.values = response.data.values;
+                    }).catch(e => {
+                console.log("Error " + e);
+            })
+        },
+
+        editItem(item) {
+            this.editedIndex = this.values.indexOf(item);
+            this.editedItem = Object.assign({}, item);
+            ApplyForm(item);
+
+        },
+        deleteItem(item, index) {
+
+            confirm('Are you sure you want to delete this item?') && this.values.splice(index, 1);
+            axios.post('/deleteIdListing?id=' + item)
+                    .then(response => {
+//                            ListingPages(response.data);
+                    }).catch(e => {
+                console.log("Error " + e);
+            })
+        },
+        save() {
+            if (this.editedIndex > -1) {
+                Object.assign(this.desserts[this.editedIndex], this.editedItem)
+            } else {
+                this.desserts.push(this.editedItem)
+            }
+            this.close()
+        },
+        close() {
+            setTimeout(() => {
+                //this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            }, 300)
+            $("#contentarea").css("display", "");
+        },
+
+//            viewdoc(id) {
+//                var currentId = "5962854e-3cf2-11e9-b90b-180373149fa7";
+//                axios.get('/findByIdView?id=' + id + "&pageid=" + currentId)
+//                        .then(response => {
+//                            this.viewData = response.data
+//                        }).catch(e => {
+//                    console.log("Error " + e);
+//                })
+//            },
+    },
+//        created() {
+//            axios.get(`/findByIdListing`)
+//                    .then(response => {
+//                        this.limit = response.data.header.length - 1;
+//                        this.headers = response.data.header;
+//                        props: {
+//                            source: String
+//                        }
+//                        this.values = response.data.values;
+//                    }).catch(e => {
+//                console.log("Error " + e);
+//            })
+//        },
+
+
+})
+</script>
+
+
+<!--//        methods: {
+//            ApplyForm: function () {
+//                alert("apply");
+//                ApplyForm(0);
+//            },
+//            SubmitValues: function () {
+//
+//            },
+//
+//           
+//            deletedata: function (id) {
+//                axios.post('/deleteIdListing?id=' + id)
+//                        .then(response => {
+//                            ListingPages(response.data);
+//                        }).catch(e => {
+//                    console.log("Error " + e);
+//                })
+//            },
+//            ApplyFormEdit(id) {
+//                ApplyForm(id);
+//
+//            }-->

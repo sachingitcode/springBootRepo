@@ -1,0 +1,157 @@
+<v-app id="applicationHome">
+    <v-form ref="form" lazy-validation>
+        <template>
+            <v-container fluid class="pa-0">
+                <v-toolbar flat class="grey lighten-3">
+                    <v-toolbar-title>
+                        Application Home
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-dialog v-model="dialog" max-width="500px">
+                        <template v-slot:activator="{ on }">
+                            <v-btn color="primary" dark class="mb-2 flat" v-on="on"><v-icon>add</v-icon> New Item</v-btn>
+                        </template>
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">{{ formTitle }}</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container grid-list-md th:replace="pages/application/editPage.html :: mainpage"> 
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+                                <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-toolbar>
+
+            </v-container>
+        </template>
+
+        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" >
+            <template v-slot:activator="{on}">
+                <div th:replace="fragments/formelements.html :: pagelist(headers='headers', values='values')"></div>   
+            </template>
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="dialog = false">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>View Details</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-layout>
+                    <v-flex v-for="(value, propertyName) in viewData">
+                        <v-card-text>{{ propertyName }}: {{ value }}</v-card-text>                
+                    </v-flex>
+                </v-layout>  
+            </v-card>
+            <div class="container">
+                <v-card>
+                    <div th:include="pages/application/editPage.html :: footerbuttons()"></div>
+                </v-card>
+            </div>
+        </v-dialog>
+    </v-form>
+</v-app>
+
+<script>
+    var ba98b760 = new Vue({
+        el: "#applicationHome",
+        data: {
+            breadcrumb: [
+                {
+                    text: 'Dashboard',
+                    disabled: true,
+                    href: '#'
+                },
+                {
+                    text: 'Link 1',
+                    disabled: true,
+                    href: '#'
+                },
+                {
+                    text: 'Link 2',
+                    disabled: true,
+                    href: '#'
+                }
+            ],
+            search: '',
+            headers: [],
+            values: [],
+            limit: 0,
+            birth_from: '',
+            birth_to: '',
+            dialog: false,
+
+            viewData: {
+
+            },
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+            }
+        },
+        props: {
+            source: String
+        },
+        created() {
+            axios.get(`/findByIdListing`)
+                    .then(response => {
+                        this.limit = response.data.header.length - 1;
+                        this.headers = response.data.header;
+                        props: {
+                            source: String
+                        }
+                        this.values = response.data.values;
+                    }).catch(e => {
+                console.log("Error " + e);
+            })
+        },
+        methods: {
+            ApplyForm: function () {
+                alert("apply");
+                ApplyForm(0);
+            },
+            SubmitValues: function () {
+
+            },
+
+            viewdoc: function (id) {
+                var currentId = "5962854e-3cf2-11e9-b90b-180373149fa7";
+                axios.get('/findByIdView?id=' + id + "&pageid=" + currentId)
+                        .then(response => {
+                            this.viewData = response.data
+                        }).catch(e => {
+                    console.log("Error " + e);
+                })
+            },
+            deletedata: function (id) {
+                axios.post('/deleteIdListing?id=' + id)
+                        .then(response => {
+                            ListingPages(response.data);
+                        }).catch(e => {
+                    console.log("Error " + e);
+                })
+            },
+            ApplyFormEdit(id) {
+                ApplyForm(id);
+
+            }
+        },
+    });
+</script>

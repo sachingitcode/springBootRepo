@@ -1,0 +1,121 @@
+
+<html>  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script></html>
+<v-app id="masterAddForm">
+    <div data-th-replace="fragments/text-field :: formHeader()"></div>
+    <v-form ref="form" v-model="valid" lazy-validation>
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap>
+                <table >
+                    <v-flex xs12 sm4 md4 lg4 xl4 class="pt-2 pl-5" row>
+                        <h4>Master:</h4> 
+                    </v-flex>
+                    <v-flex xs12 sm4 md4 lg4 xl4 class="">    <v-text-field xs12 sm6 md6 lg6 xl4 placeholder="Master"  v-model="master" ></v-text-field>
+                    </v-flex>  <v-flex xs12 sm12 md12 lg12 xl12 class=""></v-flex>
+
+                    <v-flex xs12 sm4 md4 lg4 xl4 >       <h4>Master Type:</h4> </v-flex>
+
+                    <!--                    <tr v-for="(input, index) in details" :key="index">
+                                            <td>
+                                        <v-flex xs12 sm6 md6 lg6 xl4 >  <v-text-field  xs12 sm6 md6 lg6 xl4 placeholder="Values" v-model="input.values" ></v-text-field>
+                                        </v-flex>  
+                                        </td>
+                                        </tr>-->
+
+                    <tbody>
+                        <tr v-for="(input, index) in details" :key="index">
+                            <td class="text-xs-center"> 
+                                {{index+1}}  
+                            </td>
+                            <td>
+                    <v-text-field  xs12 sm6 md6 lg6 xl4 placeholder="Values" v-model="input.values" ></v-text-field>
+                    </td>
+                    </tr>
+
+                </table>
+                <v-btn fab dark small  color="green" @click="addRow">
+                    <v-icon fab dark color="primary">mdi-plus</v-icon>
+                </v-btn>
+                <v-btn  fab dark small color="red" @click="deleteRow">
+                    <v-icon dark color="primary">mdi-minus</v-icon>
+                </v-btn>
+
+                <v-flex xs12 sm12 md12 lg12 xl12 class=" text-sm-center">
+                    <div th:replace="fragments/formelements.html :: footerbuttons()"></div></v-flex>
+            </v-layout>   
+        </v-container>
+    </v-form>
+</v-app>
+
+<script th:inline="javascript">
+new Vue({
+    el: "#masterAddForm",
+      vuetify: new Vuetify(),
+    data: {
+        loading: false,
+        search: null,
+        select: null,
+        menu: false,
+        valid: true,
+        title: 'tile new ',
+        master: '',
+        details: [{values: ''}]
+    },
+    methods: {
+        addRow() {
+            this.details.push({values: ''})
+        },
+        deleteRow() {
+            var myData = this.details;
+            if (myData.length > 1) {
+                this.details.splice(-1, 1)
+            }
+        },
+
+        CloseForm() {
+            CloseForm()
+        },
+        Submit() {
+            axios.post('/saveMasterData',
+                    {
+                        "master": this.master,
+                        "userData": this.details
+                    })
+                    .then(response => {
+                        ListingPages(/*[[${session.listPages}]]*/);
+                    })
+                    .catch(e => {
+                        alert("Error " + e);
+                    })
+        },
+
+        saveasDraft() {}
+    },
+
+    created() {
+
+//        var encrypted = CryptoJS.AES.encrypt("ItIsToBeEncr", "usa2010");
+//        var decrypted = CryptoJS.AES.decrypt(encrypted, "usa2010");
+//        alert("ENCRY  " + encrypted);
+//        alert("DERCY  " + (decrypted.toString(CryptoJS.enc.Utf8)));
+
+
+
+            axios.get(`/findMastersById`)
+                    .then(response => {
+                        this.master = response.data.name;
+                        let nameArr = response.data.value.split(',');
+                        console.log(nameArr[0])
+                        console.log(JSON.parse(nameArr[0]));
+                        this.details = [];
+                        for (let i = 0; i < nameArr.length; i++) {
+                            this.details.push(JSON.parse(nameArr[i]))
+                        }
+
+                    }).catch(e => {
+                console.log("Error " + e);
+            })
+
+    }
+});
+
+</script>

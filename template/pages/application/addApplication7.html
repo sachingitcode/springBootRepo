@@ -1,0 +1,454 @@
+<v-app id="addApplication7">
+    <v-container fluid>
+        <v-form ref="form" v-model="valid" lazy-validation>
+
+            <h2>PART C:</h2>          
+
+            <h2>17. OTHER RELEVANT INFORMATION</h2>          
+
+            <h5>Please give details of any other credentials, significant contributions, awards received etc. not
+                mentioned earlier.</h5>
+
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Details (Mention Year, value, etc. where relevant)</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.oth_ret" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Details (Mention Year, value, etc. where relevant) " v-model="input.details" :rules="nameRules"></v-text-field>
+                        </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+            <br>
+            <br>
+
+            <h4>18. SUMMARY OF API SCORES(Teaching, Learning and Evaluation Related Activities)</h4>
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+
+
+                                <th>Academic
+                                    year</th>
+                                <th>Annual API Score</th>
+                                <th>API Score for
+                                    Assessment Period</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.sum_ary" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+
+
+                                <td>
+                        <v-text-field placeholder="YYYY " v-model="input.year" :rules="[rules.yearr,rules.yeard,rules.yeari,rules.number]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="Annual" v-model="input.anu_al" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="API Score  " v-model="input.api_score" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow1">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow1">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+
+
+            <br>
+            <br>
+            <br>
+
+            <v-layout>
+                <vflex   xs12 sm12 md12 lg12 xl6>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th> Category</th>
+                                <th>Criteria</th>
+                                <th>Assessment Period</th>
+                                <th>API Score for Assessment Period</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>II</td>
+
+                                <td>Co-curricular, Extension,
+                                    professional development etc.</td>
+                                <td> <v-text-field placeholder=" " v-model="userData.assement_a" :rules="[rules.required,rules.length]"></v-text-field></td>
+                        <td> <v-text-field placeholder=" " v-model="userData.apiscore_a" :rules="[rules.required,rules.number]"></v-text-field></td>
+                        </tr>    
+                        <tr>
+
+                            <td>III</td>
+
+                            <td>Research and Academic
+                                Contribution</td>
+                            <td> <v-text-field placeholder=" " v-model="userData.assement_b" :rules="[rules.required,rules.length]"></v-text-field></td>
+                        <td> <v-text-field placeholder=" " v-model="userData.apiscore_b" :rules="[rules.required,rules.number]"></v-text-field></td>     
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>     
+
+                        </tr>
+                        <tr>
+
+                            <td></td>
+
+                            <td>Total II+III</td>
+                            <td></td>
+                            <td></td>     
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </vflex>
+            </v-layout>
+            <br>
+            <br>
+
+            <h5>19. List of Enclosures:</h5>
+
+            <v-layout>
+                <vflex   xs12 sm12 md12 lg12 xl6>
+                    <table class="table table-bordered">
+
+                        <tbody>
+
+                            <tr>
+                                <td>(a) Copies of certificate/Evidence of Teaching & Co-Curricular Activities Claimed.</td>
+
+
+                                <td> <v-text-field placeholder=" " v-model="userData.cop_of" :rules="[rules.required,rules.number]"></v-text-field></td>
+
+                        </tr>    
+                        <tr>
+                            <td>(b) List of publications with details, reprints of papers published and acceptance letters
+                                (in case accepted papers/articles etc.)</td>
+
+
+                            <td> <v-text-field placeholder=" " v-model="userData.li_of" :rules="[rules.required,rules.number]"></v-text-field></td>
+
+                        </tr>
+
+                        <tr>
+                            <td>(c) Copies of other relevant certificates & documents for any other claim made.</td>
+
+
+                            <td> <v-text-field placeholder=" " v-model="userData.cop_ot" :rules="[rules.required,rules.number]"></v-text-field></td>
+
+                        </tr>
+                        <tr>
+                            <td>(d) Copies of certificate/Evidence of Refresher course, Orientation course Research
+                                Methodology Course, Workshops, Training, Faculty Development Programs, etc.
+                                attended.</td>
+
+
+                            <td> <v-text-field placeholder=" " v-model="userData.cop_cer" :rules="[rules.required,rules.number]"></v-text-field></td>
+
+                        </tr>
+                        <tr>
+                            <td>(e) Copies of Best 3/5 Publications for Assessment.</td>
+
+
+                            <td> <v-text-field placeholder=" " v-model="userData.cop_bes" :rules="[rules.required,rules.number]"></v-text-field></td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </vflex>
+            </v-layout>
+
+            <div th:replace="fragments/formelements.html :: footerbuttons(previous='HandlePrevious',saveasDraft='saveasDraft',HandleSubmit='HandleSubmit')"></div>
+
+        </v-form>
+    </v-container>
+
+
+</v-app>
+
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#addApplication7",
+        data: {
+
+            valid: true,
+            date: '',
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /.+@.+/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits',
+
+            },
+//            fieldRules: [
+//                v => !!v || 'Field is required'],
+//            nameRules: [
+//                v => !!v || 'Field is required',
+//                v => (v && v.length <= 50) || 'Name must be less than 50 characters'
+//            ],
+//            emailRules: [
+//                v => !!v || 'Field is required',
+//                v => /.+@.+/.test(v) || 'E-mail must be valid'
+//            ],
+//            yearRules: [
+//                v => !!v || 'Year is required',
+//                v => (v && v.length === 4) || 'Year must be 4 digits',
+//                v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year'
+//            ],
+//            numberRules: [
+//                v => !!v || 'Field is required',
+//                v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers'
+//            ],
+            currentId: /*[[${currentId}]]*/ '',
+            nextId: /*[[${next}]]*/ '',
+            prevId: /*[[${previous}]]*/ '',
+            id: 0,
+            userData: {
+
+                assement_a: '',
+
+                assement_b: '',
+                apiscore_a: '',
+                apiscore_b: '',
+                cop_bes: '',
+                cop_cer: '',
+                cop_ot: '',
+                li_of: '',
+                cop_of: '',
+                oth_ret: [{
+                        details: '', }],
+                sum_ary: [{
+                        year: '',
+                        anu_al: '',
+                        api_score: '', }],
+            }
+        },
+        methods: {
+            addRow() {
+                this.userData.oth_ret.push({
+                    details: '',
+                })
+            },
+            addRow1() {
+                this.userData.sum_ary.push({
+                    year: '',
+                    anu_al: '',
+                    api_score: '',
+
+                })
+            },
+
+            deleteRow() {
+                var myData = this.userData.oth_ret;
+                if (myData.length > 1) {
+                    this.userData.oth_ret.splice(-1, 1)
+                }
+            },
+            deleteRow1() {
+                var myData = this.userData.sum_ary;
+                if (myData.length > 1) {
+                    this.userData.sum_ary.splice(-1, 1)
+                }
+            },
+            check() {
+                console.log('data==>>');
+                var myData = this.inputs;
+                for (var i in myData) {
+                    console.log(myData[i].one);
+                }
+            },
+            validate() {
+                if (this.$refs.form.validate()) {
+                    this.snackbar = true
+                }
+            },
+            reset() {
+                this.$refs.form.reset()
+            },
+            HandleSubmit() {
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+//                alert("currentId==>>" + currentId);
+//                alert("nextId==>>" + nextId);
+//                alert("savedID==>>" + this.id);
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+                        .then(response => {
+//                            alert("Response==>>" + response);
+//                            alert(nextId);
+                            if (nextId !== null) {
+                                loadForm(nextId);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+
+
+            },
+            saveasDraft() {
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+
+                        .then(response => {
+//                            alert("Response==>>" + response);
+//                            alert(nextId);
+                            if (nextId !== null) {
+                                loadForm("707902c6-4a21-11e9-aaf4-8c89a53bcce4");
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+
+            },
+            HandlePrevious() {
+                var currentId = removeQuot(this.currentId);
+                var prevId = removeQuot(this.prevId);
+                if (prevId !== null) {
+                    loadForm(prevId);
+                }
+            }
+
+        },
+        created() {
+            var currentId = removeQuot(this.currentId);
+            axios.get('/findById?id=' + currentId)
+                    .then(response => {
+                        if (response.data != '') {
+                            this.userData = response.data.dt;
+                            this.id = response.data.id;
+                        }
+
+
+////                     
+//                        alert("Response==>>" + response.data);
+//                        alert("Response==>>" + response.data.id);
+                    })
+                    .catch(e => {
+                        alert("Error" + e);
+                    })
+        }
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

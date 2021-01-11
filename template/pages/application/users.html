@@ -1,0 +1,82 @@
+<div id="users">
+    <v-app>
+         <div   style="color:red; height: 50px;" >
+        
+        <v-toolbar flat class="grey lighten-3">
+            <v-toolbar-title>
+                {{title}}
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark class="mb-2 flat" @Click="Loadform"><v-icon>mdi-plus</v-icon> New Item</v-btn>
+        </v-toolbar>
+         </div>
+        <v-card data-th-replace="fragments/formelements.html :: dataTablesList()">
+        </v-card>
+    </v-app>
+</div>
+
+
+
+
+
+<script> 
+    new Vue({
+        el: "#users",
+         vuetify: new Vuetify(),
+        data: {
+            search: '',
+            headers: [],
+            values: [],
+            pagination: {
+                rowsPerPage: 10
+            },
+           title: /*[[${session.title}]]*/ '',
+            rules: {
+//                required: v => !!v || 'Field is required',
+//                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+//                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+//                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+//                yearr: v => !!v || 'Year is required',
+//                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+//                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+//                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+            },
+        },
+        created() {     //   same as appllicationHome
+            axios.get(`/findByIdListing`)
+                    .then(response => {
+                        this.limit = response.data.header.length - 1;
+                        this.headers = response.data.header;
+                        this.values = response.data.values;
+                    }).catch(e => {
+                console.log("Error " + e);
+            })
+        },
+        methods: {
+            Loadform() {
+                ApplyForm(0);
+            },
+
+            editItem(item) {
+                this.editedIndex = this.values.indexOf(item);
+                this.editedItem = Object.assign({}, item);
+                ApplyForm(item);
+
+            },
+            deleteItem(item, index) {
+                confirm('Are you sure you want to delete this item?') && this.values.splice(index, 1);
+                axios.post('/deleteIdListing?id=' + item)
+                        .then(response => {
+                        }).catch(e => {
+                    console.log("Error " + e);
+                })
+            },
+            saveasDraft(){},
+
+        },
+
+       
+
+    });
+</script>

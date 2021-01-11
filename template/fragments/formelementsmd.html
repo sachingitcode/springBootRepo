@@ -1,0 +1,110 @@
+<!-- input field start-->
+<div
+  th:fragment="input(label,id, divId,model,maxlength,placeholder,onblur)"
+  class="col-lg-6 col-md-6 mb-4"
+  th:id="${divId}"
+>
+  <div class="md-form">
+    <input
+      type="text"
+      id="form1"
+      class="form-control"
+      th:@blur="${onblur}"
+      th:maxlength="${maxlength}"
+      th:v-model="${model}"
+    />
+    <label for="form1" class=""><span th:text="${label}"></span></label>
+  </div>
+</div>
+<!-- input field end-->
+
+<!-- select start -->
+<div
+  th:fragment="select(label, id,divId, model, list,onchange)"
+  class="col-lg-6 col-md-6 mb-4"
+  th:id="${divId}"
+>
+  <select
+  class="browser-default custom-select"
+    th:id="${id}"
+    th:name="${id}"
+    th:v-model="${model}"
+    th:@change="${onchange}"
+  >
+    <option
+      th:each="item, itemStat: ${list}"
+      th:value="${itemStat.index}"
+      th:text="${item}"
+    ></option>
+  </select>
+</div>
+<!-- <div
+  th:fragment="select(label, id,divId, model, list,onchange)"
+  class="col-lg-6 col-md-6 mb-4"
+  th:id="${divId}"
+>
+  <select
+    class="mdb-select md-form colorful-select dropdown-primary"
+    th:id="${id}"
+    th:name="${id}"
+    th:v-model="${model}"
+    th:@change="${onchange}"
+    searchable="Search here.."
+  >
+    <option value="" disabled selected>--Select--</option>
+    <option
+      th:each="item, itemStat: ${list}"
+      th:value="${itemStat.index}"
+      th:text="${item}"
+    ></option>
+  </select>
+  <label><span th:text="${label}"></span></label>
+</div> -->
+<!-- select end -->
+
+<!-- multi-select start -->
+<!-- <div
+  th:fragment="multi-select(label, id,divId, model, list,onchange)"
+  class="col-lg-6 col-md-6 mb-4"
+  th:id="${divId}"
+>
+  <select
+    class="mdb-select md-form colorful-select dropdown-primary"
+    th:id="${id}"
+    th:name="${id}"
+    th:v-model="${model}"
+    th:@change="${onchange}"
+    multiple
+    searchable="Search here.."
+  >
+    <option value="" disabled selected>--Select--</option>
+    <option
+      th:each="item, itemStat: ${list}"
+      th:value="${itemStat.index}"
+      th:text="${item}"
+    ></option>
+  </select>
+  <label><span th:text="${label}"></span></label>
+  <button class="btn-save btn btn-primary btn-sm">Save</button>
+</div> -->
+<!-- multi-select end -->
+
+<!-- datetimepicker start-->
+<div
+  th:fragment="datetimepicker(label,id, divId,model,config,onchange)"
+  class="col-lg-6 col-md-6 mb-4"
+  th:id="${divId}"
+>
+  <div class="md-form">
+    <date-picker
+      type="text"
+      id="form1"
+      class="form-control"
+      th:v-model="${model}"
+      th::config="${config}"
+      th:@dp-change="${onchange}"
+    ></date-picker>
+    <label for="form1" class=""><span th:text="${label}"></span></label>
+  </div>
+</div>
+<!-- datetimepicker end-->

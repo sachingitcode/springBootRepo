@@ -1,0 +1,426 @@
+<html xmlns:th="https://www.thymeleaf.org"    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue2-dropzone@3.6.0/dist/vue2Dropzone.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script  src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
+
+        <style>
+            #modalContainer {
+                background-color:rgba(0, 0, 0, 0.3);
+                position:absolute;
+                width:100%;
+                height:100%;
+                top:0px;
+                left:0px;
+                z-index:10000;
+                background-image:url(tp.png); /* required by MSIE to prevent actions on lower z-index elements */
+            }
+
+            #alertBox {
+                position:relative;
+                width:300px;
+                min-height:100px;
+                margin-top:50px;
+                border:1px solid #666;
+                background-color:#fff;
+                background-repeat:no-repeat;
+                background-position:20px 30px;
+            }
+
+            #modalContainer > #alertBox {
+                position:fixed;
+            }
+
+            #alertBox h1 {
+                margin:0;
+                font:bold 0.9em verdana,arial;
+                background-color:#3073BB;
+                color:#FFF;
+                border-bottom:1px solid #000;
+                padding:2px 0 2px 5px;
+            }
+
+            #alertBox p {
+                font:0.7em verdana,arial;
+                height:50px;
+                padding-left:5px;
+                margin-left:55px;
+            }
+
+            #alertBox #closeBtn {
+                display:block;
+                position:relative;
+                margin:5px auto;
+                padding:7px;
+                border:0 none;
+                width:70px;
+                font:0.7em verdana,arial;
+                text-transform:uppercase;
+                text-align:center;
+                color:#FFF;
+                background-color:#357EBD;
+                border-radius: 3px;
+                text-decoration:none;
+            }
+
+            /* unrelated styles */
+
+            #mContainer {
+                position:relative;
+                width:600px;
+                margin:auto;
+                padding:5px;
+                border-top:2px solid #000;
+                border-bottom:2px solid #000;
+                font:0.7em verdana,arial;
+            }
+
+            h1,h2 {
+                margin:0;
+                padding:4px;
+                font:bold 1.5em verdana;
+                border-bottom:1px solid #000;
+            }
+
+            code {
+                font-size:1.2em;
+                color:#069;
+            }
+
+            #credits {
+                position:relative;
+                margin:25px auto 0px auto;
+                width:350px; 
+                font:0.7em verdana;
+                border-top:1px solid #000;
+                border-bottom:1px solid #000;
+                height:90px;
+                padding-top:4px;
+            }
+
+            #credits img {
+                float:left;
+                margin:5px 10px 5px 0px;
+                border:1px solid #000000;
+                width:80px;
+                height:79px;
+            }
+
+            .important {
+                background-color:#F5FCC8;
+                padding:2px;
+            }
+
+            code span {
+                color:green;
+            }
+        </style>
+
+
+
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+
+        <div id="app" >  
+            <v-app   style="background-image:url(pages/static/images/bg1.jpg)"  >
+                <v-main>
+                    <v-container   fluid fill-height>
+                        <v-layout align-center justify-center>
+                            <v-flex xs12 sm8 md4> 
+                                <v-card class="elevation-12">
+                                    <v-toolbar   color="primary">
+
+                                        <v-toolbar-title>   Sign In </v-toolbar-title>
+                                        <v-spacer>  </v-spacer>
+                                    </v-toolbar>
+                                </v-card>
+                                <v-card-text>
+                                    <v-form  ref="form"    v-model="valid"      lazy-validation name='f' th:action="@{/j_spring_security_check}" method='POST'>
+                                        <v-text-field  name="username" label="Username" type="text" v-model="username" :rules="userNameRules"></v-text-field>
+                                        <v-text-field id="password" name="password" label="Password" type="password" v-model="password"  :rules="passwordRules"></v-text-field>
+                                        <v-btn :disabled="!valid"  
+                                               color="success"
+                                               @click="validate"   input name="submit" type="submit" value="submit" >  Submit</v-btn>
+                                        <v-btn   
+                                            color="info"
+                                            @click="clear"
+                                            >  Clear</v-btn>
+
+                                        <v-btn   
+                                            color="red"
+                                            @click="newuserpage()"
+                                            >Sign Up</v-btn>
+                                        <v-btn   
+                                            color="yellow"
+                                            @click="forgotPassword()"
+                                            >  Forgot</v-btn>
+                                        <!--<v-btn    small  color="success" @click="paytmBtn()" > Paytm</v-btn>-->
+
+                                        <!--<a hide href="OnlinePaymentPaytmGateway">Show </a>-->
+                                        <!--<input type="button" value = "Test the alert" onclick="alert('Alert this pages');" />-->
+                                    </v-form>
+                                </v-card-text>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-main>
+            </v-app>
+
+            
+  
+            
+            
+            
+            
+        </div>
+
+        <script>
+            const app = new Vue({
+                el: '#app',
+                vuetify: new Vuetify(),
+                drawer: null,
+                data() {
+                    return {
+                        valid: true,
+                        e1: false,
+                        password: '',
+                        username: '',
+                        message: 'Mr. Sachin.',
+                        userNameRules: [
+                            v => !!v || 'Username is required'],
+                        passwordRules: [
+                            (v) => !!v || 'Password is required',
+                        ],
+                        email: '',
+                        emailRules: [
+                            (v) => !!v || 'E-mail is required',
+                            (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                        ],
+                    }
+
+                },
+                props: {
+                    source: String
+                },
+                methods: {
+                    validate() {
+                        if (this.$refs.form.validate()) {
+                            this.snackbar = true
+                        }
+                    },
+                    clear() {
+                        this.$refs.form.reset()
+                    },
+                     newuserpage() {
+                       location.href = 'newUser';
+                    },
+                     forgotPassword() {
+                     alert("This Feature is Under Development");
+                    },
+                    
+                    
+                     paytmBtn(){
+                          window.location.href = "OnlinePaymentPaytmGateway";
+                                 
+//                                axios.get('/OnlinePaymentPaytmGateway')
+//                        .then(response => {
+//                            if (response.data === true) {
+////                                ListPages(/*[[${session.listPages}]]*/);
+//                            }
+//                        })
+//                        .catch(e => {
+//                            alert("Error");
+//                        })
+                    },
+                },
+            })
+        </script>
+
+        <script>
+            
+            var ALERT_TITLE = "Sorry!";
+var ALERT_BUTTON_TEXT = "Ok";
+
+if(document.getElementById) {
+    window.alert = function(txt) {
+        createCustomAlert(txt);
+    }
+}
+
+function createCustomAlert(txt) {
+    d = document;
+
+    if(d.getElementById("modalContainer")) return;
+
+    mObj = d.getElementsByTagName("body")[0].appendChild(d.createElement("div"));
+    mObj.id = "modalContainer";
+    mObj.style.height = d.documentElement.scrollHeight + "px";
+
+    alertObj = mObj.appendChild(d.createElement("div"));
+    alertObj.id = "alertBox";
+    if(d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
+    alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth)/2 + "px";
+    alertObj.style.visiblity="visible";
+
+    h1 = alertObj.appendChild(d.createElement("h1"));
+    h1.appendChild(d.createTextNode(ALERT_TITLE));
+
+    msg = alertObj.appendChild(d.createElement("p"));
+    //msg.appendChild(d.createTextNode(txt));
+    msg.innerHTML = txt;
+
+    btn = alertObj.appendChild(d.createElement("a"));
+    btn.id = "closeBtn";
+    btn.appendChild(d.createTextNode(ALERT_BUTTON_TEXT));
+    btn.href = "#";
+    btn.focus();
+    btn.onclick = function() { removeCustomAlert();return false; }
+
+    alertObj.style.display = "block";
+
+}
+
+function removeCustomAlert() {
+    document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
+} 
+    </script>
+
+
+
+
+    </body>
+</html>
+
+
+
+
+
+<!--
+
+//                          window.location.href = 'http://www.google.com';
+//This will open Google in a new window.
+//                       window.location.href = '/newUserPage.html';
+newuserpage2() {                    
+window.location.href = 'pages/smplTest.png'; 
+},
+newuserpage3() {                    
+window.open('newUserPage'); 
+},
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

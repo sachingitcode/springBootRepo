@@ -1,0 +1,274 @@
+<v-app id="addApplication2ns">
+    <v-container fluid>
+        <v-form ref="form" v-model="valid" lazy-validation>
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>List of documents to be attached 11243</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.oth_ret" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="List of documents to be attached" v-model="input.details" ></v-text-field>
+                        </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+            <br>
+            <br>
+
+            <h6>I declare that the information given above is correct to the best of knowledge and belief, i agreed
+                to pay all fees advance and to abid by the terms and regulation stated in the Prospectus
+            </h6>
+            <br>
+            <br>
+            <br>
+            <v-layout>            
+                <v-flex  xs12 sm3 md3 lg12 xl6>
+                    <v-text-field placeholder="Signature of the Parent/Guardian " v-model="userData.par_g" ></v-text-field>
+                </v-flex>
+                <br>
+                <br>
+                <v-flex  xs12 sm6 md6 lg12 xl6></v-flex>
+                <v-flex  xs12 sm3 md3 lg12 xl6>
+                    <v-text-field placeholder="Signature of the Student " v-model="userData.stu_of" ></v-text-field>
+                </v-flex>
+            </v-layout>
+
+
+            <v-layout>            
+                <v-flex xs12 sm3 md3 lg12 xl6>
+                    <v-menu
+                        v-model="userData.menu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                        >
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                v-model="userData.date"
+                                label="Dated"
+                                prepend-icon="event"
+                                readonly
+                                v-on="on"
+                                ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="userData.date"  @input="userData.menu = false"></v-date-picker>
+                    </v-menu>              
+                    <v-spacer></v-spacer>
+                </v-flex > 
+            </v-layout>
+            <br>
+            <br>
+
+
+
+            <h6>(Incompelete application forms without proper enclouseres shall be liable for outright rejection) </h6>
+            <br>
+            <br>
+            <br>
+
+            <div th:replace="fragments/formelements.html :: footerbuttons(previous='HandlePrevious',saveasDraft='saveasDraft',HandleSubmit='HandleSubmit')"></div>
+
+
+        </v-form>
+    </v-container>
+
+
+</v-app>
+
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#addApplication2ns",
+        data: {loading: false,
+            search: null,
+            select: null,
+            menu: false,
+            valid: true,
+            date: '',
+            currentId: /*[[${currentId}]]*/ '',
+            nextId: /*[[${next}]]*/ '',
+            nextId12: /*[[${next}]]*/ '',
+            prevId: /*[[${previous}]]*/ '',
+            tid: /*[[${tid}]]*/ '',
+            id: 0,
+
+            userData: {
+
+                par_g: '',
+                stu_of: '',
+                date: '',
+                oth_ret: [{
+                        details: '', }],
+
+            },
+//            rules: {
+//                required: v => !!v || 'Field is required',
+//                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+//                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+//                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+//                yearr: v => !!v || 'Year is required',
+//                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+//                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+//                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits',
+//
+//            },
+        },
+        methods: {
+            addRow() {
+                this.userData.oth_ret.push({
+                    details: '',
+                })
+            },
+
+            deleteRow() {
+                var myData = this.userData.oth_ret;
+                if (myData.length > 1) {
+                    this.userData.oth_ret.splice(-1, 1)
+                }
+            },
+
+            HandleSubmit() {
+
+                axios.post('/saveData',
+                        {
+                            "id": this.currentId,
+                            "tid": this.tid,
+                            "nextId": this.nextId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+                        .then(response => {
+                            if (this.nextId !== null) {
+                                loadForm(this.nextId, this.tid);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error " +e);
+                        })
+
+
+            },
+            saveasDraft() {
+                var tid = removeQuot(this.tid);
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "tid": tid,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+
+                        .then(response => {
+                            if (nextId !== null) {
+                                loadForm("707902c6-4a21-11e9-aaf4-8c89a53bcce4", tid);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error  " + e);
+                        })
+
+            },
+            HandlePrevious() {
+                var tid = removeQuot(this.tid);
+                var currentId = removeQuot(this.currentId);
+                var prevId = removeQuot(this.prevId);
+                if (prevId !== null) {
+                    loadForm(prevId, tid);
+                }
+            }
+
+        },
+        created() {
+            var currentId = removeQuot(this.currentId);
+            var tid = removeQuot(this.tid);
+            axios.get('/findById?id=' + tid + "&pageid=" + currentId)
+                    .then(response => {
+                        if (response.data != '') {
+                            this.userData = response.data.dt;
+                            this.id = response.data.id;
+                        }
+                    })
+                    .catch(e => {
+                        alert("Error  " + e);
+                    })
+
+        }
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

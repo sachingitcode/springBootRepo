@@ -1,0 +1,47 @@
+<v-app id="erpAddPage1">
+    <!--<div data-th-replace="fragments/text-field :: formHeader()"></div>-->
+    <v-form ref="form" v-model="valid">
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <div data-th-replace="fragments/text-field :: input12(label='Last Name',model='userData.lastName',placeholder='Enter Last Name',counter='',rules='[rules.required,rules.number,rules.length]')"></div>
+            <div data-th-replace="fragments/text-field :: input6(label='Name(in capital letter)',model='userData.name',placeholder='Enter First Name',counter='',rules='[rules.required,rules.length]')"> </div>
+            <div data-th-replace="fragments/text-field :: calender6(label='Date Of Birth',model='userData.dob',rules='')">  </div>
+            <div data-th-replace="fragments/text-field :: input6(label='Mobile No',model='userData.mobile_f',placeholder='Enter Mobile Number',counter='10',rules='[rules.required,rules.number,rules.lengthp]')">  </div>
+            <div data-th-replace="fragments/text-field :: input6(label='E-mail ID',model='userData.email_f',placeholder='Enter Email ',counter='25',rules='[rules.required,rules.email]')"> </div>
+            <div data-th-replace="fragments/text-field :: radio4(text='Ward of Employee of D.U.' ,model='userData.row6',rules='')"> </div>
+            <div data-th-replace="fragments/text-field :: radio4(text='Residence of India' ,model='userData.resd', rules='')"> </div>
+            <div data-th-replace="fragments/text-field :: radio4(text='Foreign Students' ,model='userData.row7' ,rules='')"> </div>-->
+            <!--<div th:replace="fragments/formelements.html :: footerbuttons()"></div>-->
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+
+
+<script>
+    new Vue({
+        el: "#erpAddPage1",
+        vuetify: new Vuetify(),
+        data: {
+            title: /*[[${session.title}]]*/ '',
+            loading: false,
+            search: null,
+            select: null,
+            valid: true,
+            menu9: false,
+            cat: false,
+            userData: {
+                name: '',
+                lastName: '',
+                Dob: '',
+                mobile_f: '',
+                email_f: '',
+                row6: '',
+                row7: '',
+                resd: ''
+            },
+            rules: {
+
+            }
+        }
+    })
+</script>

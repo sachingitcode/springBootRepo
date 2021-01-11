@@ -1,0 +1,38 @@
+<v-navigation-drawer
+    data-th-fragment="navigation-drawer"
+    :clipped="clipped"
+    v-model="drawer"
+    hide-overlay
+    stateless
+    enable-resize-watcher
+    app
+    light
+    permanent
+    absolute
+    >
+    <v-list>
+        <v-list-tile>
+            <v-list-tile-content>
+                <v-list-tile-title class="text-center">
+                    <span>YadaVas</span>
+                </v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+        <v-divider></v-divider>
+        <template  v-for="dt in linkList" >
+            <v-list-tile  tag="li"  @click.stop="drawer = !drawer" @click="ListPages(dt.id,dt.link_name)">
+                <v-list-tile-content >{{dt.link_name}}
+                </v-list-tile-content>
+            </v-list-tile>
+        </template>
+    </v-list>
+</v-navigation-drawer>
+
+
+
+
+
+
+
+
+

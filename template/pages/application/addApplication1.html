@@ -1,0 +1,618 @@
+<v-app id="addApplication1">
+    <div data-th-replace="fragments/text-field :: formHeader()"></div>
+    <v-form ref="form" v-model="valid" >
+        <!--lazy-validation-->
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap>
+                <v-col xs12 sm12 md12 lg12 xl12 class="text-sm-center pt-3">
+                    <h3>UNIVERSITY INSTITUTE OF ENGINEERING AND TECHNOLOGY </h3>
+                    <label>(UNIVERSITY OF KURUKSHETRA)</label>
+                </v-col>
+                <div data-th-replace="fragments/text-field :: input12(label='University Enrolment No',model='userData.delhi_no',placeholder='',counter='',rules='[rules.required,rules.number,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Name(in capital letter)',model='userData.name',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <v-flex xs12 sm12 md6 lg6 xl6>
+                    <v-menu
+                        v-model="menu9"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                        >
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                v-model="userData.Dob"
+                                label="Date of Birth"
+                                hint="(post holding at present)"
+                                prepend-icon="mdi-calendar-today"
+                                readonly
+                                v-on="on"
+                                ></v-text-field>
+                        </template>
+                        <v-date-picker @change="getAge" v-model="userData.Dob" @input="menu9 = false"></v-date-picker>
+                    </v-menu>              
+                    <v-spacer></v-spacer>
+
+                </v-flex>
+                <div data-th-replace="fragments/text-field :: input6(label='Mobile No',model='userData.mobile',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='E-mail ID',model='userData.email',placeholder='',counter='',rules='[rules.required,rules.email]')"> </div>
+                <v-layout row wrap>
+                    <div data-th-replace="fragments/text-field :: input4(label='Age as on 1st Oct of the Current Year',model='userData.age',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"></div>
+                    <div data-th-replace="fragments/text-field :: input4(label='Months',model='userData.mont',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"></div>
+                    <div data-th-replace="fragments/text-field :: input4(label='Days',model='userData.day',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"></div>    
+                </v-layout>
+                <div data-th-replace="fragments/text-field :: input6(label='Fathers/Guardians Name',model='userData.fath',placeholder='',counter='50',rules='[rules.required,rules.length]')"></div>
+                <div data-th-replace="fragments/text-field :: input6(label='Mobile No',model='userData.mobile_m',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input4(label='E-mail ID',model='userData.email_m',placeholder='',counter='',rules='[rules.required,rules.email]')"> </div>
+                <div data-th-replace="fragments/text-field :: input4(label='Mothers Name',model='userData.moth',placeholder='',counter='50',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input4(label='Mob No',model='userData.mobno',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input4(label='Nationality',model='userData.natio',placeholder='',counter='20',rules='[rules.required,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input4(label='Present Address',model='userData.pre_add',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input4(label='Mailing Address',model='userData.mail_add',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Emergency Contact No',model='userData.emer_cont',placeholder='',counter='',rules='[rules.required,rules.length,rules.number]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Tel No.(if any)',model='userData.tel_no',placeholder='',counter='10',rules='[rules.required,rules.length,rules.number]')"> </div>
+                <!--<div data-th-replace="fragments/text-field :: input6(label='EMail',model='userData.email1',placeholder='',counter='',rules='[rules.required,rules.email]')"> </div>-->
+
+                <v-layout>
+                    <v-flex xs12 sm6 md6>
+                        <br>
+                        <h4>If Admission sought under any special category</h4>
+                    </v-flex>
+
+                    <v-flex xs12 sm6 md6>
+                        <v-radio-group  v-model="userData.row8" row>
+
+                            <v-radio label="Yes" value="true"></v-radio>
+                            <v-radio label="No" value="false"></v-radio>
+
+                        </v-radio-group>
+                    </v-flex>   
+                </v-layout>
+
+                <div v-if='userData.row8=="true"'>
+                    <h4>if yes. Please specify  the special category for Admission</h4>
+
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>a)Scheduled Caste</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row" row>
+
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>b)Scheduled Tribe</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row1" row>
+
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>c)OBC</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row2"  row>
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>d)Ward or Window of armed personnel killed/disabled  in action during hostilities</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row3" row>
+
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>e)Physically Handicapped(HH/OH/PH)</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row4" row>
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>f)Sports/ECA</h6>
+                        </v-flex>
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row5" row>
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>g)Ward of Employees of University of Delhi</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row6" row>
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12 sm6 md6>
+                            <br>
+                            <h6>h)Foreign Students</h6>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-radio-group v-model="userData.row7" row>
+                                <v-radio label="Yes" value="radio-1"></v-radio>
+                                <v-radio label="No" value="radio-2"></v-radio>
+                            </v-radio-group>
+                        </v-flex>   
+                    </v-layout>
+                </div>
+
+                <v-flex  xs12 sm12 md12>
+                    <h3>Details of Senior Secondary or equivalent examination passed:</h3>   </v-flex>
+                <div data-th-replace="fragments/text-field :: input6(label='Examiation ',model='userData.exm',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Board',model='userData.board',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Year of passing',model='userData.year_ofpass',placeholder='YYYY',counter='',rules='[rules.yearr,rules.yeard,rules.yeari,rules.number]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='RollNo',model='userData.roll_no',placeholder='',counter='',rules='[rules.required,rules.length,rules.number]')"> </div>
+                <v-flex xs12 sm12 md12 lg12 xl12>
+                    <v-card>
+                        <v-card-title class="text-right">
+                            <v-btn icon color="green" @click="addRow">
+                                <v-icon color="white">add</v-icon>
+                            </v-btn>
+                            <v-btn icon color="red" @click="deleteRow">
+                                <v-icon color="white">remove</v-icon>
+                            </v-btn>
+                        </v-card-title>
+
+                        <table class="table table-bordered" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="5%">Sl.No</th>
+                                    <th width="30%">Subject</th>
+                                    <th width="20%">Max.Marks</th>
+                                    <th width="20%">Marks Obtained</th>
+                                    <th width="5%" >%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(input, index) in userData.ref_course" :key="index">
+                                    <td>
+                                        {{index+1}}  
+                                    </td>
+                                    <td>
+                            <v-text-field placeholder="Subject" v-model="input.sub_name" :rules="[rules.required,rules.length]"></v-text-field>
+                            </td>
+                            <td>
+                            <v-text-field placeholder="Max.Marks" @change="maxmarks(index)" v-model="input.max_marks" :rules="[rules.required,rules.length,rules.number]"></v-text-field>
+                            </td>
+                            <td>
+                            <v-text-field placeholder="Marks Obtained" @change="obtmarks(index);perc(index)" v-model="input.marks_obtai" :rules="[rules.required,rules.length,rules.number]"></v-text-field>
+                            </td>
+                            <td>  
+                                <label >{{input.perc}}</label> 
+                            </td>                         
+                            </tr>
+                            </tbody>
+                        </table>
+                    </v-card>
+                </v-flex>
+                <div data-th-replace="fragments/text-field :: input6(label='Total Marks Obtained',model='userData.total_mark',placeholder='YYYY',counter='',rules='[rules.required,rules.length,rules.number]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='%/CGPA',model='userData.cgpa',placeholder='',counter='',rules='[rules.required,rules.length,rules.number]')"> </div>
+                <div th:replace="fragments/formelements.html :: footerbuttons()"></div>
+            </v-layout>
+        </v-container>
+    </v-form>
+</v-app>
+<script>
+    new Vue({
+        el: "#addApplication1",
+        vuetify: new Vuetify(),
+        data: {
+            title: /*[[${session.title}]]*/ '',
+            loading: false,
+            search: null,
+            select: null,
+            valid: true,
+            menu9: false,
+            cat: false,
+
+            userData: {
+                name: '',
+                delhi_no: '',
+                doc_pk: '',
+                Dob: '',
+                mobile: '',
+                email: '',
+                age: '',
+                mont: '',
+                days: '',
+                mobile_m: '',
+                email_m: '',
+                mobile1: '',
+                occupation: '',
+                mobile2: '',
+                mobno: '',
+                email1: '',
+                occupation1: [],
+                natio: '',
+                pre_add: '',
+                mail_add: '',
+                emer_cont: '',
+                row: '',
+                row1: '',
+                row2: '',
+                row3: '',
+                row4: '',
+                row5: '',
+                row6: '',
+                row7: '',
+                tel_no: '',
+                email2: '',
+                exm: '',
+                board: '',
+                year_ofpass: '',
+                roll_no: '',
+                date_ofaward: '',
+                cgpa: '',
+                total_mark: '',
+                moth: '',
+                row8: "true",
+                ref_course: [{
+                        sub_name: '',
+                        max_marks: '',
+                        marks_obtai: '',
+                        perc: ''
+
+                    }]
+            },
+            rules: {
+//                required: v => !!v || 'Field is required',
+//                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+//                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+//                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+//                yearr: v => !!v || 'Year is required',
+//                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+//                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+//                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+            }
+        },
+        watch: {
+            search(val) {
+                alert
+                val && val !== this.select && this.querySelections(val)
+            }
+        },
+        methods: {
+            CloseForm() {
+                CloseForm()
+//                $("#formcontainer").css("display", "none");
+//                $("#formContent").html("");
+//                $("#contentarea").css("display", "");
+            },
+            maxmarks(index) {
+                var marks = this.userData.ref_course[index].max_marks;
+                if (marks != '') {
+                    if (marks > 101) {
+                        alert("Maximum Marks should not be Greater than 100 ");
+                        this.userData.ref_course[index].max_marks = '';
+                    }
+                }
+            },
+            getAge() {
+                var date = this.userData.Dob;
+                if (date !== '') {
+                    axios.get('/getAge?date=' + date)
+                            .then(response => {
+                                if (response.data != '') {
+                                    var myAge = response.data.split('#');
+                                    this.userData.age = myAge[0];
+                                    this.userData.mont = myAge[1];
+                                    this.userData.day = myAge[2];
+                                }
+                            })
+                            .catch(e => {
+                                alert("Error" + e);
+                            })
+                }
+            },
+            obtmarks(index) {
+                var obtmark = this.userData.ref_course[index].marks_obtai;
+                var maxmark = this.userData.ref_course[index].max_marks;
+              
+                if (obtmark != '') {
+                    if (parseInt(obtmark) > parseInt(maxmark)) {
+                        alert("Obtained Marks should be less than Maximium Marks ");
+                        this.userData.ref_course[index].marks_obtai = '';
+                    }
+                }
+            },
+            perc(index) {
+                var maxmark = this.userData.ref_course[index].max_marks;
+                var markobt = this.userData.ref_course[index].marks_obtai;
+                var perc = (markobt / maxmark * 100).toFixed(2);
+                this.userData.ref_course[index].perc = perc;
+            },
+            querySelections(v) {
+                this.loading = true
+                // Simulated ajax query
+                setTimeout(() => {
+                    this.items = this.occupation.filter(e => {
+                        return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+                    })
+                    this.loading = false
+                }, 500)
+            },
+
+            addRow() {
+                this.userData.ref_course.push({
+                    sub_name: '',
+                    max_marks: '',
+                    marks_obtai: '',
+                    perc: '',
+                })
+            },
+            deleteRow() {
+                var myData = this.userData.ref_course;
+                if (myData.length > 1) {
+                    this.userData.ref_course.splice(-1, 1)
+                }
+            },
+            saveasDraft() {
+
+            },
+            reset() {
+                this.$refs.form.reset();
+            },
+            NextSubmit() {
+                axios.post('/saveData',
+                        {
+                            "id": this.id,
+                            "userData": this.userData
+                        })
+                        .then(response => {
+                            LoadForm(response.data);
+                        })
+                        .catch(e => {
+                            alert("Error" + e);
+                        })
+            },
+            PreviousSubmit() {
+                LoadPrevForm();
+            },
+            Submit() {
+                axios.post('/saveData', this.userData)
+                        .then(response => {
+                            if (response.data === true) {
+                                ListPages(/*[[${session.listPages}]]*/);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+            pausecomp(millis) {       // test : define outside the vue in this page only , like it is degined in homepage
+                var date = new Date();
+                var curDate = null;
+                do {
+                    curDate = new Date();
+                } while (curDate - date < millis);
+            }
+        },
+
+        created() {
+            axios.get('/findById')
+                    .then(response => {
+                        if (response.data != "")
+                        {
+                            this.id = response.data.id;
+                            this.userData = JSON. parse(response.data.dt);
+                        }
+                    })
+                    .catch(e => {
+                        alert("Error" + e);
+                    })
+        }
+
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

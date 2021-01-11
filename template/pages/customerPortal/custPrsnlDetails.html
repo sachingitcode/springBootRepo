@@ -1,0 +1,274 @@
+
+<v-app id="custprsnldetails">
+    <!--<div data-th-replace="fragments/text-field :: formHeader()"></div>-->
+    <v-form ref="form" v-model="valid" >
+        <!--lazy-validation-->
+        <v-container grid-list-md style="padding:10px 10px 10px 10px;">
+            <v-layout wrap>
+                <v-col xs12 sm12 md12 lg12 xl12 class="text-sm-center pt-3">
+                    <h2>Personal Details  </h2>
+                    <label></label>
+                </v-col>
+                <v-flex xs12 sm12 md12 lg12 xl12></v-flex>
+                
+                <div data-th-replace="fragments/text-field :: input6(label='First Name ',model='userData.first_name',placeholder='Entering',counter='',rules='[rules.required ]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Last Name',model='userData.last_name',placeholder='',counter='',rules='[rules.required ]')"> </div>
+             <div data-th-replace="fragments/text-field :: input6(label='Mobile No',model='userData.mobile',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='E-mail ID',model='userData.email',placeholder='',counter='',rules='[rules.required,rules.email]')"> </div>
+                 <div data-th-replace="fragments/text-field :: input6(label='Fathers/Guardians Name',model='userData.father_name',placeholder='',counter='50',rules='[rules.required,rules.length]')"></div>
+             
+                <v-flex xs12 sm12 md6 lg6 xl6>
+                    <v-menu
+                        v-model="menu9"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                        >
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                v-model="userData.Dob"
+                                label="Date of Birth"
+                                hint="(post holding at present)"
+                                prepend-icon="mdi-calendar-today"
+                                readonly
+                                v-on="on"
+                                ></v-text-field>
+                        </template>
+                        <v-date-picker @change="getAge" v-model="userData.Dob" @input="menu9 = false"></v-date-picker>
+                    </v-menu>              
+                    <v-spacer></v-spacer>
+
+                </v-flex>
+                <v-layout row wrap>
+                    <div data-th-replace="fragments/text-field :: input4(label='Age as on 1st Oct of the Current Year',model='userData.age',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"></div>
+                    <div data-th-replace="fragments/text-field :: input4(label='Months',model='userData.mont',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"></div>
+                    <div data-th-replace="fragments/text-field :: input4(label='Days',model='userData.day',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"></div>    
+                </v-layout>
+                <div data-th-replace="fragments/text-field :: input6(label='Mobile No',model='userData.father_mobile',placeholder='',counter='10',rules='[rules.required,rules.number,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='E-mail ID',model='userData.father_email',placeholder='',counter='',rules='[rules.required,rules.email]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Mothers Name',model='userData.mother_name',placeholder='',counter='50',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Nationality',model='userData.nationality',placeholder='',counter='20',rules='[rules.required,rules.lengthp]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Present Address',model='userData.address',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <div data-th-replace="fragments/text-field :: input6(label='Mailing Address',model='userData.mail_address',placeholder='',counter='',rules='[rules.required,rules.length]')"> </div>
+                <!--<div data-th-replace="fragments/text-field :: input6(label='Emergency Contact No',model='userData.emer_cont',placeholder='',counter='',rules='[rules.required,rules.length,rules.number]')"> </div>-->
+                <div class="flex sm12 xs12 md6 lg6 xl4 xl4"> </div>
+                <!--<div data-th-replace="fragments/text-field :: input6(label='Tel No.(if any)',model='userData.tel_no',placeholder='',counter='10',rules='[rules.required,rules.length,rules.number]')"> </div>-->
+
+<!--                <v-layout>
+                    <v-flex xs12 sm6 md6>
+                        <br>
+                        <h4>Income Type</h4>
+                    </v-flex>
+
+                    <v-flex xs12 sm6 md6>
+                        <v-radio-group  v-model="userData.income_type" row>
+                            <v-radio label="Salaried" value="true"></v-radio>
+                            <v-radio label="Self-Employed" value="false"></v-radio>
+                        </v-radio-group>
+                    </v-flex>   
+                </v-layout>-->
+                  <div th:replace="fragments/formelements.html :: footerbuttonsSave()"></div>
+            </v-layout>
+        </v-container>
+    </v-form>
+    
+    
+    <button type="button" class="transition-swing v-btn v-btn--bottom v-btn--is-elevated v-btn--fab v-btn--fixed v-btn--has-bg v-btn--right v-btn--round theme--light v-size--large primary" aria-label="Scroll to top" title="Scroll to top" style="z-index: 6; margin-bottom: 0px; transform-origin: center center;"><span class="v-btn__content"><span aria-hidden="true" class="v-icon notranslate theme--light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-hidden="true" class="v-icon__svg"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"></path></svg></span></span></button>
+</v-app>
+<script>
+    new Vue({
+        el: "#custprsnldetails",
+        vuetify: new Vuetify(),
+        data: {
+            title: /*[[${session.title}]]*/ '',
+            loading: false,
+            search: null,
+            select: null,
+            valid: true,
+            menu9: false,
+            cat: false,
+
+            userData: {
+                first_name: '',
+                last_name: '',
+                Dob: '',
+                mobile: '',
+                email: '',
+                age: '',
+                mont: '',
+                days: '',
+                father_name: '',
+                father_mobile: '',
+                father_email: '',
+                mother_name: '',
+                nationality: '',
+                address: '',
+                mail_address: '',
+                emer_cont: '',
+                tel_no: '',
+                income_type:'',
+            },
+            rules: {
+//                required: v => !!v || 'Field is required',
+//                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+//                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+//                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+//                yearr: v => !!v || 'Year is required',
+//                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+//                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+//                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+            }
+        },
+        watch: {
+            search(val) {
+                val && val !== this.select && this.querySelections(val)
+            }
+        },
+        methods: {
+            CloseForm() {
+                CloseForm()
+//                $("#formcontainer").css("display", "none");
+//                $("#formContent").html("");
+//                $("#contentarea").css("display", "");
+            },
+           
+            getAge() {
+                var date = this.userData.Dob;
+                if (date !== '') {
+                    axios.get('/getAge?date=' + date)
+                            .then(response => {
+                                if (response.data != '') {
+                                    var myAge = response.data.split('#');
+                                    this.userData.age = myAge[0];
+                                    this.userData.mont = myAge[1];
+                                    this.userData.day = myAge[2];
+                                }
+                            })
+                            .catch(e => {
+                                alert("Error" + e);
+                            })
+                }
+            },
+            
+            querySelections(v) {
+                this.loading = true
+                // Simulated ajax query
+                setTimeout(() => {
+                    this.items = this.occupation.filter(e => {
+                        return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+                    })
+                    this.loading = false
+                }, 500)
+            },
+
+            addRow() {
+                this.userData.ref_course.push({
+                    sub_name: '',
+                    max_marks: '',
+                    marks_obtai: '',
+                    perc: '',
+                })
+            },
+            deleteRow() {
+                var myData = this.userData.ref_course;
+                if (myData.length > 1) {
+                    this.userData.ref_course.splice(-1, 1)
+                }
+            },
+            saveasDraft() {
+
+            },
+            reset() {
+                this.$refs.form.reset();
+            },
+            
+            paytmBtn(){
+                
+                                axios.get('/OnlinePaymentPaytmGateway')
+                        .then(response => {
+                            
+                            if (response.data === true) {
+//                                ListPages(/*[[${session.listPages}]]*/);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+            
+            
+            
+            
+//            NextSubmit() {
+//                axios.post('/saveData',      //saveCustomerData
+//                        {
+//                            "id": this.id,
+//                            "userData": this.userData,
+////                            "actionType":'post'           // pre for prevous button , post for nexxt button ; it will tell controller which page to return       
+//                        })
+//                        .then(response => {
+//                            LoadForm(response.data);
+//                        })
+//                        .catch(e => {
+//                            alert("Error" + e);
+//                        })
+//            },
+            Submit() {
+                axios.post('/saveCustomerData',     //saveCustomerData
+                        {
+                            "id": this.id,
+                            "userData": this.userData,
+                            "pageSno":'1'           // pre for prevous button , post for nexxt button ; it will tell controller which page to return       
+                        })
+                        .then(response => {
+//                            LoadForm(response.data);
+                            ListingPages("custFncnlDetails");
+                    
+                        })
+                        .catch(e => {
+                            alert("Error" + e);
+                        })
+            },
+
+
+            PreviousSubmit() {
+                LoadPrevForm();
+            },
+//            Submit() {
+//                axios.post('/saveData', this.userData)
+//                        .then(response => {
+//                            if (response.data === true) {
+//                                ListPages(/*[[${session.listPages}]]*/);
+//                            }
+//                        })
+//                        .catch(e => {
+//                            alert("Error");
+//                        })
+//            },
+            pausecomp(millis) {       // test : define outside the vue in this page only , like it is degined in homepage
+                var date = new Date();
+                var curDate = null;
+                do {
+                    curDate = new Date();
+                } while (curDate - date < millis);
+            }
+        },
+
+//        created() {
+//            axios.get('/findByCustomerId?pageSno=12341')
+//                    .then(response => {
+//                        if (response.data != "")
+//                        {
+//                            this.id = response.data.id;
+//                            this.userData = JSON. parse(response.data.dt);
+//                        }
+//                    })
+//                    .catch(e => {
+//                        alert("Error " + e);
+//                    })
+//        } 
+    }) ;
+</script>

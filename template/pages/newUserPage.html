@@ -1,0 +1,125 @@
+  
+
+<html xmlns:th="https://www.thymeleaf.org"    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue2-dropzone@3.6.0/dist/vue2Dropzone.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script  src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
+
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+
+    <v-app  id="newUserPage">
+        <v-main>
+            <v-container fluid fill-height>
+                <v-layout align-center justify-center>
+                    <v-flex xs12 sm8 md4> 
+                        <v-card class="elevation-12">
+                            <v-toolbar   color="primary">
+
+                                <v-toolbar-title>   Sign Up  </v-toolbar-title>
+                                <v-spacer>  </v-spacer>
+                            </v-toolbar>
+                        </v-card>
+                            <v-form  ref="form"    v-model="valid"  >
+                                <v-text-field  id="username"   name="username" label="Username" type="text" v-model="userData.username" :rules="rules.required"></v-text-field>
+                                <v-text-field id="mobileno" name="mobileno" label="Mobile No" type="text" v-model="userData.mobileno"   ></v-text-field>
+                                <v-text-field id="password" name="password" label="Password" type="text" v-model="userData.password"  :rules="rules.required"></v-text-field>
+                                <v-text-field id="password2" name="password2" label="Password" type="password"   :rules="rules.required"></v-text-field>
+                         <v-flex xs12 sm12 md12>
+                        <v-radio-group  v-model="userData.role_type_id" row>
+                          <v-radio label="User"    value="2"></v-radio>
+                            <v-radio label="Admin" value="3"></v-radio>
+                        </v-radio-group>
+                    </v-flex>   
+                            <v-btn :disabled="!valid"  
+                                       color="success"
+                                       @click="NextSubmit()"  >  Submit</v-btn>
+                                <v-btn   
+                                    color="info"
+                                    @click="clear"
+                                    >  Clear</v-btn>
+                                 
+                            </v-form>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-main>
+    </v-app> 
+
+
+</body>
+</html>
+<script>
+           const app = new Vue({
+               el: '#newUserPage',
+               vuetify: new Vuetify(),
+               drawer: null,
+              data: {
+               loading: false,
+               search: null,
+               select: null,
+               valid: true,
+               menu9: false,
+               cat: false,
+               userData: {
+                username: '',
+                password: '',
+                mobileno: '',
+                role_type_id:'2'
+               },
+            rules: {
+                required: v => !!v || 'Field is required',
+//                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+//                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+//                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+//                yearr: v => !!v || 'Year is required',
+//                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+//                email: v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+//                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits'
+            }
+        },
+               props: {
+                   source: String
+               },
+               methods: {
+                   validate() {
+                       if (this.$refs.form.validate()) {
+                           this.snackbar = true
+                       }
+                   },
+                   clear() {
+                       this.$refs.form.reset()
+                   },
+                    NextSubmit() {
+                    axios.post('/newUserSave',
+                        { 
+                            "userData": this.userData
+                        })
+                        .then(response => {
+//                            LoadForm(response.data);
+                        })
+                        .catch(e => {
+                            alert("Error" + e);
+                        })
+            },
+                   
+                   
+               },
+           })
+</script>
+

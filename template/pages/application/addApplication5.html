@@ -1,0 +1,822 @@
+<v-app id="addApplication5">
+    <v-container fluid>
+        <v-form ref="form" v-model="valid" lazy-validation>
+
+
+
+
+            <v-layout>
+                <v-flex row wrap xs12 sm12 md6 lg6 xl6 >
+
+                    <h4>13. Research Projects (other than that for a research degree)
+
+
+                    </h4>
+
+                </v-flex>
+            </v-layout>
+
+            <v-layout>
+                <v-flex row wrap xs12 sm12 md6 lg6 xl6 >
+
+                    <h6>
+                        (i) Sponsored Projects (Please attach separate sheet, if necessary)
+
+                    </h6>
+
+                </v-flex>
+            </v-layout>
+
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Title/Subject of
+                                    Research
+                                    Project(s)</th>
+                                <th>Whether
+                                    major or
+                                    minor
+                                    project</th>
+                                <th>Date  of  Commencement</th>
+                                <th>Date of Completion</th>
+                                <th>Total
+                                    Grants /
+                                    Funding
+                                    received
+                                    (Rs.)</th>
+                                <th>Name of
+                                    Sponsoring/
+                                    Funding
+                                    Agency</th> 
+                                <th>Self API</th>
+                                <th>Verified API</th>
+
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.research_pro" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Title " v-model="input.title" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="Whether"  v-model="input.publis_her" :rules="[rules.required]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.date_com"
+                                            label="Date"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.date_com"  @input="input.menu = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu1"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.date_comple"
+                                            label="Date"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.date_comple"  @input="input.menu1 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Total
+                                      Grants " v-model="input.total_gra" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Name of
+                                      Sponsoring " v-model="input.name_spo" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verified API" v-model="input.ver_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+
+
+
+            <br>
+            <br>
+            <br>
+            <h6>(ii) Consultancy Projects (Please attach separate sheet, if necessary)
+            </h6>
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Title/Subject of
+                                    Research
+                                    Project(s)</th>
+
+                                <th>Date  of  Commencement</th>
+                                <th>Date of Completion</th>
+                                <th>Total
+                                    Grants /
+                                    Funding
+                                    received
+                                    (Rs.)</th>
+                                <th>Name of
+                                    Sponsoring/
+                                    Funding
+                                    Agency</th> 
+                                <th>Self API</th>
+                                <th>Verified API</th>
+
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.consult_pro" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Title " v-model="input.title" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu2"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.date_com"
+                                            label="Date"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.date_com"  @input="input.menu2 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu3"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.date_comple"
+                                            label="Date"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.date_comple"  @input="input.menu3 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Total
+                                      Grants " v-model="input.total_gra" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Name of
+                                      Sponsoring " v-model="input.name_spo" :rules="[rules.required]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verified API" v-model="input.ver_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow1">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow1">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+
+
+            <br>
+            <br>
+            <br>
+            <h6>(iii) Projects Outcome/Outputs (Please attach separate sheet, if necessary)
+            </h6>
+            <v-layout>
+
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Title/Subject of
+                                    Research
+                                    Project(s)</th>
+                                <th>Whether
+                                    Patent/
+                                    Technology
+                                    Transfer/
+                                    Product/
+                                    Process/
+                                    Policy Paper</th>
+                                <th>Date  of  Commencement</th>
+                                <th>Date of Completion</th>
+
+                                <th>Whether
+                                    Outcome
+                                    /Outputs
+                                    sent to
+                                    Sponsoring
+                                    Agency</th> 
+                                <th> Types of
+                                    Agencies:
+                                    International
+                                    Bodies
+                                    (WHO/UNO/
+                                    UNESCO/U
+                                    NICEF etc.).
+                                    Central/
+                                    State Govt./
+                                    Local Bodies</th>
+                                <th>Self API</th>
+                                <th>Verified API</th>
+
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.pro_out" :key="index">
+                                <td>
+                                    {{index+1}}  
+                                </td>
+                                <td>
+                        <v-text-field placeholder="Title " v-model="input.title" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Whether patent " v-model="input.whether_pat" :rules="[rules.required]"></v-text-field>
+                        </td>
+
+
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu4"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.date_com"
+                                            label="Date"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.date_com"  @input="input.menu4 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+
+                        <td>
+                        <v-layout>            
+                            <v-flex xs12 sm12 md12 lg12 xl6>
+                                <v-menu
+                                    v-model="input.menu5"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="input.date_comple"
+                                            label="Date"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                            ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="input.date_comple"  @input="input.menu5 = false"></v-date-picker>
+                                </v-menu>              
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Whether Outcome
+                                      " v-model="input.whether_out" :rules="[rules.required]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Types of
+                                      Agencies:" v-model="input.types_age" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verified API" v-model="input.ver_api" :rules="numberRules"></v-text-field>
+                        </td>
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow2">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow2">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+            <br>
+            <br>
+            <br>
+
+
+
+
+            <h4>14. Research Guidance:</h4><h6>Number of scholars who have been awarded M.Phil./Ph.D. degree or submitted
+                M.Phil./Ph.D under your supervision both as Guide and/or Co-Guide</h6>
+            <v-layout>
+                <v-flex xs12 sm12 md12 lg12 xl6>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Academic
+                                    Year</th>
+                                <th colspan="2">Ph.D.
+                                </th>
+                                <th colspan="2">M.Phil./M.Tech.</th>
+
+
+                                <th rowspan="2">Self API</th>
+                                <th rowspan="2">Verified API</th>
+                            </tr>
+                            <tr>
+                                <th>No. of Awarded</th> 
+                                <th>No. of
+                                    Submission
+                                    (Thesis)</th> 
+
+                                <th>No. of Awarded</th> 
+                                <th>No. of
+                                    Submission
+                                </th> 
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(input, index) in userData.research_guid" :key="index">
+
+                                <td>
+                        <v-text-field placeholder="Academic Year" v-model="input.acad_year" :rules="[rules.yearr,rules.yeard,rules.yeari,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="No. of Awarded" v-model="input.no_award" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-text-field placeholder="No. of Submission" v-model="input.no_submissiont" :rules="[rules.required,rules.length]"></v-text-field>
+                        </td>
+
+                        <td>
+                        <v-text-field placeholder="No. of Awarded" v-model="input.no_awards" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-text-field placeholder="No. of  Submission" v-model="input.no_submission" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+
+                        <td>
+                        <v-text-field placeholder="Self API" v-model="input.self_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+                        <td>
+                        <v-text-field placeholder="Verified API" v-model="input.ver_api" :rules="[rules.required,rules.number]"></v-text-field>
+                        </td>
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <v-btn icon color="green" @click="addRow3">
+                        <v-icon color="white">add</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red" @click="deleteRow3">
+                        <v-icon color="white">remove</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+
+
+            <div th:replace="fragments/formelements.html :: footerbuttons(previous='HandlePrevious', saveasDraft='saveasDraft',HandleSubmit='HandleSubmit')"></div>
+
+        </v-form>
+    </v-container>
+
+
+</v-app>
+<script th:inline="javascript">
+    var myObject = new Vue({
+        el: "#addApplication5",
+        data: {
+
+            valid: true,
+            date: '',
+            rules: {
+                required: v => !!v || 'Field is required',
+                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
+                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+                yeari: v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year',
+                yearr: v => !!v || 'Year is required',
+                yeard: v => (v && v.length === 4) || 'Year must be 4 digits',
+                email: v => /.+@.+/.test(v) || 'E-mail must be valid',
+                lengthp: v => (v && v.length <= 10) || 'Number must be 10 digits',
+
+            },
+
+//            nameRules: [
+//                v => !!v || 'Field is required',
+//                v => (v && v.length <= 50) || 'Name must be less than 50 characters'
+//            ],
+//            fieldRules: [
+//                v => !!v || 'Field is required'],
+//            emailRules: [
+//                v => !!v || 'Field is required',
+//                v => /.+@.+/.test(v) || 'E-mail must be valid'
+//            ],
+//            numberRules: [
+//                v => !!v || 'Field is required',
+//                v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers'
+//            ],
+//            yearRules: [
+//                v => !!v || 'Year is required',
+//                v => (v && v.length === 4) || 'Year must be 4 digits',
+//                v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
+//                v => /^(19|20)\d{2}$/.test(v) || 'Invalid Year'
+//            ],
+            currentId: /*[[${currentId}]]*/ '',
+            nextId: /*[[${next}]]*/ '',
+            prevId: /*[[${previous}]]*/ '',
+            id: 0,
+            userData: {
+                research_pro: [{
+                        title: '',
+                        date_comple: '',
+                        publis_her: '',
+                        whether: '',
+                        total_gra: '',
+                        name_spo: '',
+                        ver_api: '',
+                        self_api: '',
+                        date_com: '',
+                        menu: false,
+                        menu1: false,
+                    }],
+                consult_pro: [{
+                        title: '',
+                        date_comple: '',
+                        publis_her: '',
+                        total_gra: '',
+                        name_spo: '',
+                        ver_api: '',
+                        self_api: '',
+                        date_com: '',
+                        menu2: false,
+                        menu3: false,
+                    }],
+                pro_out: [{
+                        title: '',
+                        date_comple: '',
+                        whether_out: '',
+                        whether_pat: '',
+                        types_age: '',
+                        ver_api: '',
+                        self_api: '',
+                        date_com: '',
+                        menu4: false,
+                        menu5: false
+                    }],
+                research_guid: [{
+                        acad_year: '',
+                        no_award: '',
+                        no_submission: '',
+                        no_submissiont: '',
+                        no_awards: '',
+                        ver_api: '',
+                        self_api: '',
+
+                    }],
+
+            }
+        },
+        methods: {
+            addRow() {
+                this.userData.research_pro.push({
+                    title: '',
+                    date_comple: '',
+                    publis_her: '',
+                    whether: '',
+                    total_gra: '',
+                    name_spo: '',
+                    ver_api: '',
+                    self_api: '',
+                    date_com: '',
+                    menu: false,
+                    menu1: false,
+                })
+            },
+            addRow1() {
+                this.userData.consult_pro.push({
+                    title: '',
+                    date_comple: '',
+                    publis_her: '',
+                    total_gra: '',
+                    name_spo: '',
+                    ver_api: '',
+                    self_api: '',
+                    date_com: '',
+                    menu2: false,
+                    menu3: false
+                })
+            },
+            addRow2() {
+                this.userData.pro_out.push({
+                    title: '',
+                    date_comple: '',
+                    whether_out: '',
+                    whether_pat: '',
+                    types_age: '',
+                    ver_api: '',
+                    self_api: '',
+                    date_com: '',
+                    menu4: false,
+                    menu5: false
+                })
+            },
+            addRow3() {
+                this.userData.research_guid.push({
+                    acad_year: '',
+                    no_award: '',
+                    no_submission: '',
+                    no_submissiont: '',
+                    no_awards: '',
+                    ver_api: '',
+                    self_api: '',
+
+                })
+            },
+
+            deleteRow() {
+                var myData = this.userData.research_pro;
+                if (myData.length > 1) {
+                    this.userData.research_pro.splice(-1, 1)
+                }
+            },
+            deleteRow1() {
+                var myData = this.userData.consult_pro;
+                if (myData.length > 1) {
+                    this.userData.consult_pro.splice(-1, 1)
+                }
+            },
+            deleteRow2() {
+                var myData = this.userData.pro_out;
+                if (myData.length > 1) {
+                    this.userData.pro_out.splice(-1, 1)
+                }
+            },
+            deleteRow3() {
+                var myData = this.userData.research_guid;
+                if (myData.length > 1) {
+                    this.userData.research_guid.splice(-1, 1)
+                }
+            },
+
+            check() {
+                console.log('data==>>');
+                var myData = this.inputs;
+                for (var i in myData) {
+                    console.log(myData[i].one);
+                }
+            },
+            validate() {
+                if (this.$refs.form.validate()) {
+                    this.snackbar = true
+                }
+            },
+            reset() {
+                this.$refs.form.reset()
+            },
+            saveasDraft() {
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+
+                        .then(response => {
+//                            alert("Response==>>" + response);
+//                            alert(nextId);
+                            if (nextId !== null) {
+                                loadForm("707902c6-4a21-11e9-aaf4-8c89a53bcce4");
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+
+            },
+            HandleSubmit() {
+                var currentId = removeQuot(this.currentId);
+                var nextId = removeQuot(this.nextId);
+//                alert("currentId==>>" + currentId);
+//                alert("nextId==>>" + nextId);
+//                alert("savedID==>>" + this.id);
+                axios.post('/saveData',
+                        {
+                            "id": currentId,
+                            "savedId": this.id,
+                            "userData": this.userData
+                        })
+                        .then(response => {
+//                            alert("Response==>>" + response);
+//                            alert(nextId);
+                            if (nextId !== null) {
+                                loadForm(nextId);
+                            }
+                        })
+                        .catch(e => {
+                            alert("Error");
+                        })
+            },
+
+            HandlePrevious() {
+                var currentId = removeQuot(this.currentId);
+                var prevId = removeQuot(this.prevId);
+                if (prevId !== null) {
+                    loadForm(prevId);
+                }
+            }
+
+        },
+
+        created() {
+            var currentId = removeQuot(this.currentId);
+            axios.get('/findById?id=' + currentId)
+                    .then(response => {
+                        if (response.data != '') {
+                            this.userData = response.data.dt;
+                            this.id = response.data.id;
+                        }
+
+
+////                     
+//                        alert("Response==>>" + response.data);
+//                        alert("Response==>>" + response.data.id);
+                    })
+                    .catch(e => {
+                        alert("Error" + e);
+                    })
+        }
+    });
+
+</script>

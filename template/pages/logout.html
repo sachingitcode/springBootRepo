@@ -1,0 +1,99 @@
+<!-- 
+        <div id="logout">  
+            <v-app>
+                <v-main>
+                    <v-container fluid fill-height>
+                        <v-layout align-center justify-center>
+                            <v-flex xs12 sm8 md4> 
+                                <v-card class="elevation-12">
+                                    <v-toolbar   color="danger">
+                                        <v-toolbar-title> You Have Been Successfully Logged Out</v-toolbar-title>
+                                        <v-spacer>  </v-spacer>
+                                    </v-toolbar>
+                                </v-card>
+                                <v-btn  
+                                    color="info"
+                                    @click="logagain"
+                                    >  Sign In  Again</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-main>
+            </v-app>
+
+        </div>
+
+        <script>
+            const app = new Vue({
+                el: '#logout',
+                vuetify: new Vuetify(),
+                drawer: null,
+                data() {
+                    return {
+                        valid: true,
+                        e1: false,
+                        password: '',
+                        username: '',
+                    }
+
+                },
+                props: {
+                    source: String
+                },
+                methods: {
+                    validate() {
+                        if (this.$refs.form.validate()) {
+                            this.snackbar = true
+                        }
+                    },
+                    logagain() {
+                         window.location.href = 'login.html';
+                    }
+                },
+            })
+        </script>
+     
+
+-->
+
+<!DOCTYPE html>
+
+<html>
+<head> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  background-color: azure;
+}
+
+h1 {
+  color: blueviolet;
+  text-align: center;
+}
+
+h2 {
+  font-family: verdana;
+  font-size: 20px;
+   text-align: center;
+}
+ 
+div {
+  margin-top: 300px;
+  margin-bottom: 100px;
+  margin-right: 150px;
+  margin-left: 80px;
+}
+
+</style>
+</head>
+
+<body>
+    <div> 
+               <p style="text-align: center;"><i class="fa fa-sign-out" style="font-size:60px;color:gray;"></i></p> 
+        <h1>You have Been Logged Out</h1>
+<h2>Thank you for using our website.</h2>
+     <div> <a  style="text-align: center;"   href="login"> Login </a>    </div>     
+</div>
+
+</body>
+</html>
