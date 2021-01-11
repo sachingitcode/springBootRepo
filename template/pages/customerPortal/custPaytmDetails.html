@@ -4,9 +4,9 @@
         <v-container grid-list-md style="padding:10px 10px 10px 10px;">
             <v-layout wrap>
                 <v-col xs12 sm12 md12 lg12 xl12 class="text-sm-center pt-3">
-                     <h2>Payment Details  </h2>
+                    <h2>Payment Details  </h2>
                 </v-col> 
-                 
+
                 <v-flex xs12 sm12 md12 lg12 xl12  class="mt-6">
 
                     <div class="text-center">
@@ -35,20 +35,32 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                     <v-btn 
+                                    <v-btn 
                                         color="green"
                                         text
-                                        @click="dialog = false"
                                         >
-                                        I accept
+                                        <a   href="OnlinePaymentPaytmGateway">I Accept </a>
                                     </v-btn>
+
+
+
                                     <v-btn 
                                         color="red"
                                         text
                                         @click="dialog = false"
                                         >
-                                       Decline
+                                        Decline
                                     </v-btn>
+
+
+                                    <!--<v-btn    small  color="success" @click="paytmBtn()" > Paytm</v-btn>-->
+
+                                    <!--<a hide href="OnlinePaymentPaytmGateway">Show </a>-->
+                                    <!--<input type="button" value = "Test the alert" onclick="alert('Alert this pages');" />-->
+
+
+
+
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -108,7 +120,23 @@
                     .catch(e => {
                         alert("Error " + e);
                     })
-        } 
+        } ,
+          paytmBtn(){
+                          window.location.href = "OnlinePaymentPaytmGateway";
+                                 
+//                                axios.get('/OnlinePaymentPaytmGateway')
+//                        .then(response => {
+//                            if (response.data === true) {
+////                                ListPages(/*[[${session.listPages}]]*/);
+//                            }
+//                        })
+//                        .catch(e => {
+//                            alert("Error");
+//                        })
+                    },
+        
+        
+        
     }
     }) ;
 </script>

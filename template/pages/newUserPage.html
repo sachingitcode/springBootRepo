@@ -34,26 +34,33 @@
                                 <v-spacer>  </v-spacer>
                             </v-toolbar>
                         </v-card>
-                            <v-form  ref="form"    v-model="valid"  >
-                                <v-text-field  id="username"   name="username" label="Username" type="text" v-model="userData.username" :rules="rules.required"></v-text-field>
-                                <v-text-field id="mobileno" name="mobileno" label="Mobile No" type="text" v-model="userData.mobileno"   ></v-text-field>
-                                <v-text-field id="password" name="password" label="Password" type="text" v-model="userData.password"  :rules="rules.required"></v-text-field>
-                                <v-text-field id="password2" name="password2" label="Password" type="password"   :rules="rules.required"></v-text-field>
-                         <v-flex xs12 sm12 md12>
-                        <v-radio-group  v-model="userData.role_type_id" row>
-                          <v-radio label="User"    value="2"></v-radio>
-                            <v-radio label="Admin" value="3"></v-radio>
-                        </v-radio-group>
-                    </v-flex>   
+                        <v-form  ref="form"    v-model="valid"  >
+                            <v-text-field  id="username"   name="username" label="Username" type="text" v-model="userData.username"    :rules="userNameRules"     ></v-text-field>
+                            <v-text-field id="mobileno" name="mobileno" label="Mobile No" type="text" v-model="userData.mobileno" :rules="rules.required"  ></v-text-field>
+                            <v-text-field id="password" name="password" label="Password" type="text" v-model="userData.password"  :rules="rules.required"></v-text-field>
+                            <v-text-field id="password2" name="password2" label="Password" type="password"   :rules="rules.required"></v-text-field>
+                            <v-flex xs12 sm12 md12>
+                                <v-radio-group  v-model="userData.role_type_id" row>
+                                    <v-radio label="User"    value="2"></v-radio>
+                                    <v-radio label="Admin" value="3"></v-radio>
+                                </v-radio-group>
+                            </v-flex>   
+                            
+                            <div class="text-center">
                             <v-btn :disabled="!valid"  
-                                       color="success"
-                                       @click="NextSubmit()"  >  Submit</v-btn>
-                                <v-btn   
-                                    color="info"
-                                    @click="clear"
-                                    >  Clear</v-btn>
-                                 
-                            </v-form>
+                                   color="success"
+                                   @click="NextSubmit()"  >  Submit</v-btn>
+                            <v-btn   
+                                color="info"
+                                @click="clear"
+                                >  Clear</v-btn>
+                            <v-btn   
+                                color="yellow"
+                                @click="signInAgain()"
+                                >  Sign In</v-btn>
+                            </div>
+                            
+                        </v-form>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -75,6 +82,7 @@
                valid: true,
                menu9: false,
                cat: false,
+               userNameRules: [   v => !!v || 'Username is required'],
                userData: {
                 username: '',
                 password: '',
@@ -82,7 +90,7 @@
                 role_type_id:'2'
                },
             rules: {
-                required: v => !!v || 'Field is required',
+                required: v => !!v || 'Field is required'
 //                between: v => (v && v.length <= 50 && v.length >= 10) || 'Length must be between 10-50 characters',
 //                length: v => (v && v.length <= 50) || 'Name must be less than 50 characters',
 //                number: v => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(v) || 'Only Numbers',
@@ -111,12 +119,18 @@
                             "userData": this.userData
                         })
                         .then(response => {
-//                            LoadForm(response.data);
+                            if(response == "true"){
+                                 alert("You Are Successfully Signed Up");
+                            }
+                            location.href = '/login';
                         })
                         .catch(e => {
                             alert("Error" + e);
                         })
             },
+             signInAgain() {
+                        location.href = '/login';
+                   },
                    
                    
                },
