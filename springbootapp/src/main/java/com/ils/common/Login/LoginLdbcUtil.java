@@ -53,12 +53,15 @@ public class LoginLdbcUtil {
 //    }
     public void updateLoginDataUtil(JsonNode userData, HttpServletRequest request, HttpSession session) {  //
 //   String encPass=   getEncrypPassword(userData.get("password"));
+        String page_distinguisher = userData.get("role_type_id").toString().replaceAll("\"", "").equals("2") ? "  where  main_menu  = 'Loan Form'   " : " ";   //  it is hard coded , take it  form role_type table ; change in newUserPAge.html too
         String encPass = "$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.";
         String qry1 = " insert into USERS (username ,encrypted_password,created_date ,updated_date, role_type_id) "
                 + "values( ? ,? , now() ,now() , ?     ) ";
         String qry2 = "insert into CUSTOMER_PERSONAL_DETAILS (user_id) values( ?   ) ";
         String qry3 = " insert into USERS_ROLE (USER_ID , ROLE_ID ) values (? , ? )";
-//        logger.info(qry1);
+        String qry4 = "insert into USER_PAGEMASTER_MAPPING ( user_id , page_id )  select ? , pk from PAGE_MASTER " + page_distinguisher;
+
+        logger.info(qry4);
         try {
 //            jdbcTemplate.update(qry1);
 //               jdbcTemplate.update(qry1, new Object[]{userData.get("username").toString().replaceAll("\"", ""), encPass, userData.get("role_type_id").toString().replaceAll("\"", "")}  , keyHolder);
@@ -75,8 +78,8 @@ public class LoginLdbcUtil {
             String userId = keyHolder.getKey().toString();
 
             jdbcTemplate.update(qry2, new Object[]{userId});
-            jdbcTemplate.update(qry3, new Object[]{userId  , userData.get("role_type_id").toString().replaceAll("\"", "")  });
-
+            jdbcTemplate.update(qry3, new Object[]{userId, userData.get("role_type_id").toString().replaceAll("\"", "")});
+            jdbcTemplate.update(qry4, new Object[]{userId});
         } catch (Exception e) {
             logger.error(e.getMessage());
             e.printStackTrace();

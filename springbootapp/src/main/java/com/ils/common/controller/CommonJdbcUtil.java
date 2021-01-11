@@ -774,9 +774,9 @@ public class CommonJdbcUtil {
         logger.info("Ok  saveMasterValueDataUtil for id " + id);
     }
 
-    public String getBycommonQuery(String id) {
+    public String getBycommonQuery(String id , String userNameId) {
         String query = getQuery(id);
-        return jdbcTemplate.query(query, (ResultSet rs) -> {
+        return jdbcTemplate.query(query,  new Object[]{userNameId},   (ResultSet rs) -> {
             String data = "";
             while (rs.next()) {
                 data = rs.getString("menu");

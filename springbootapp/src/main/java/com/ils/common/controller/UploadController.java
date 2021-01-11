@@ -114,7 +114,7 @@ public class UploadController {
     String findByIdUploadListing(@RequestParam(value = "id", required = false) String id) {
         logger.info("findByIdUploadListing");
         JSONArray data = commonJdbcUtil.getQueriesForUPloadListing(id);
-        logger.info("data" + data);
+//        logger.info("data" + data);
         return data.toString();
     }
 

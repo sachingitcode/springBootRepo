@@ -318,19 +318,16 @@ public class MainController {
     public @ResponseBody
     String navData(@RequestParam(value = "id", required = false) String id) {
         JSONArray data1 = commonJdbcUtil.getNavData(id);
-        logger.info("Method: navData");
-        logger.info("navData param id: " + id);
-        logger.info("navData00 param data1: " + data1);
+         logger.info("navData00 param data1: " + data1);
         return data1.toString();
     }
 
     @RequestMapping(value = "/commonQuery", headers = "Accept=application/json")    // it is used once,, can b removed  same as navDATA
     public @ResponseBody
     String commonQuery(@RequestParam(value = "id", required = false) String id, HttpServletRequest request, HttpSession session) {
-
-        String userName = session.getAttribute("userName").toString();
-        logger.info(" id: " + id + " .. userName.." + userName);
-        String data = commonJdbcUtil.getBycommonQuery(id);
+        String userNameId = session.getAttribute("userNameId").toString();
+        logger.info(" id: " + id + " .. userNameId.." + userNameId);
+        String data = commonJdbcUtil.getBycommonQuery(id ,userNameId );
         logger.info(" Query :" + data);
         return data.toString();
     }

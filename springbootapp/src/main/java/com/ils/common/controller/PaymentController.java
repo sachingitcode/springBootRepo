@@ -100,10 +100,10 @@ public class PaymentController {
 
 //        String CUST_ID = "test@testMail.com";
         String CUST_ID = "mmd@srhu.edu.in";
-        String MOBILE_NO = "9876549876";
-        String EMAIL = "mail@testgmail.com";
-        String TXN_AMOUNT = "200";
-        String ORDER_ID = "987584";
+        String MOBILE_NO = "9879879870";
+        String EMAIL = "testMAil123@testgmail.com";
+        String TXN_AMOUNT = "2059";
+        String ORDER_ID = "987543";
 
         logger.info("ORDER_ID************   " + ORDER_ID);
         logger.info("TXN_AMOUNT************   " + TXN_AMOUNT);

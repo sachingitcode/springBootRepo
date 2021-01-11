@@ -62,8 +62,9 @@ public class LoginController {
         JsonNode userData = json.get("userData");
         logger.info("..userData..  " + userData);  
         logger.info("..role_id..  " + userData.get("role_type_id"));  
+        // by default pages show by roletypeId ,, we can later change them from USER_PAGEMASTER_MAPPING
         loginLdbcUtil.updateLoginDataUtil(userData,request, session);
-   return "/pages/login";
+   return "true";
     }
 
 }
