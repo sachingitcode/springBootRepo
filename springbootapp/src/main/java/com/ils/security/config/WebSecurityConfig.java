@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // And Setting PassswordEncoder
         logger.info("  : " + auth);
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+         }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -78,7 +78,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/home").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN' , 'Admin' )");
         // For ADMIN only.
         http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
-
         // When the user has logged in as XX.
         // But access a page that requires role YY,
         // AccessDeniedException will be thrown.
@@ -107,7 +106,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // added dec21       
 
         http.cors();
-
 //        http
 //                .cors()
 //                .configurationSource(corsConfigurationSource())
@@ -119,5 +117,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authenticated()
 //                .and()
 //                .oauth2Login();
+
     }
 }

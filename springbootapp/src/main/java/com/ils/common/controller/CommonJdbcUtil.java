@@ -42,6 +42,7 @@ public class CommonJdbcUtil {
     final KeyHolder keyHolder = new GeneratedKeyHolder();
     Logger logger = Logger.getLogger(CommonJdbcUtil.class);
 
+    
     public JSONObject saveDataUtil(JsonNode data, String tableName, String id, HttpSession session) {   //Edit
         JSONObject jsondata = new JSONObject();
         logger.info("tid " + id);
@@ -154,15 +155,14 @@ public class CommonJdbcUtil {
 
 //    @CacheEvict(value = "findById", key = "{#tabelName, #pageid}", allEntries = true)
     public String updateDataUtil(JsonNode userData, String tableName, String id, HttpSession session) {
- 
 //        String QueryString = "UPDATE " + tableName + " SET JDOC=?  WHERE r_id = ?"; //  earlier only for update
-
 //        String QueryString = "INSERT INTO " + tableName + " ( jdoc , r_id)  VALUES (?,?)  ON DUPLICATE KEY UPDATE jdoc = ?";      // insertUpdate DEC 25
-        String QueryString = "INSERT INTO " + tableName + " ( jdoc , r_id , created_date , created_by)  VALUES (?,? , now() , " + session.getAttribute("userName") + " )  ON DUPLICATE KEY UPDATE jdoc = ?";      // insertUpdate
+//        String QueryString = "INSERT INTO " + tableName + " ( jdoc , r_id , created_date , created_by)  VALUES (?,? , now() , " + session.getAttribute("userName") + " )  ON DUPLICATE KEY UPDATE jdoc = ?";      // insertUpdate
+        String QueryString = "UPDATE " + tableName + " set jdoc= ? , created_date = now() , created_by  = " + session.getAttribute("userName") + "  where  r_id = ? ";      // insertUpdate
+        logger.info("updateDataUtil: " + QueryString + " r_id for updateDataUtil: " + id);
         String status = "true";
-        logger.info("updateDataUtil: " + QueryString + "r_id for updateDataUtil: " + id);
         try {
-            jdbcTemplate.update(QueryString, new Object[]{userData.toString(), id, userData.toString()});
+            jdbcTemplate.update(QueryString, new Object[]{userData.toString(), id });
         } catch (Exception e) {
             status = "false";
             e.printStackTrace();
@@ -275,7 +275,7 @@ public class CommonJdbcUtil {
 
 //    @Cacheable(value = "getQueriesForView", key = "#id")
     public String getQueriesForView(String id, String tid) {
-        logger.info("id for getQueriesForView: " + id);
+        logger.info("id: " + id);
         String tablename = getTableNameformId(id);
 //        String sql = "select JSON_OBJECT('Name',$tablename.jdoc -> '$.name',\n"
 //                + "'Date of Birth',$tablename.jdoc -> '$.Dob',\n"
@@ -407,7 +407,7 @@ public class CommonJdbcUtil {
             while (rs.next()) {
                 data.put(new JSONObject(rs.getString("data")));
             }
-            logger.info("getNavDataComm sql" + sql);
+            logger.info(" sql" + sql);
             return data;
         });
     }
@@ -572,13 +572,11 @@ public class CommonJdbcUtil {
             while (rs.next()) {
                 data.put(new JSONObject(rs.getString("data")));
             }
-            logger.info("Ok  getMasterType ById " + data);
+            logger.info("Ok   " + data);
             return data;
         });
     }
 
-//
-//
 //    public JSONArray getListt(String id) {
 //        JSONArray data = new JSONArray();
 //        String sql = "SELECT\n"
@@ -607,8 +605,7 @@ public class CommonJdbcUtil {
         String queryList = "SELECT 	id FROM	$tablename  ORDER BY id DESC	limit 1 ";
         String tabName = getTableNameformId(id);
         String QueryString = queryList.replace("$tablename", tabName);
-//        ?????????????????????????????????????????????????????????????????????????
-        logger.info("Ok getIDforUndefined: " + QueryString);
+        logger.info("Ok  : " + QueryString);
         return jdbcTemplate.query(QueryString, new Object[]{}, (ResultSet rs) -> {
             String data = "";
             while (rs.next()) {
@@ -655,7 +652,7 @@ public class CommonJdbcUtil {
     public String deleteIdlisting(String id, String pageid) {
         String status = null;
         int count = 1;
-        logger.info(" inside pageIIIIIIIIID started: " + pageid);
+        logger.info(" inside   started: " + pageid);
         String queryList1 = null;
         String Tablename = getTableNameformId(pageid);
         logger.info(Tablename);
@@ -663,7 +660,7 @@ public class CommonJdbcUtil {
         String recursionqueryLst = queryList1.replace("$tablename", Tablename);
         jdbcTemplate.update(recursionqueryLst, new Object[]{id});
         String nextTable = nextTableID(pageid);
-        logger.info(" inside NOEEEEEEEEEEEE nextTablenextTable: " + nextTable);
+        logger.info(" inside   nextTablenextTable: " + nextTable);
         String nullHandler = "";
         if (nextTable == null || nextTable == "null" || nextTable.equals(null)) {
             logger.info(" nulHandler started: " + nextTable);
@@ -671,7 +668,7 @@ public class CommonJdbcUtil {
         }
         if (!nullHandler.equals("nullvalue")) {
             count++;
-            logger.info("DDDDDDDDDDDDDDDDD started: " + count);
+            logger.info("  started: " + count);
             deleteIdlisting(id, nextTable);
         }
         status = "true";
@@ -842,8 +839,8 @@ public class CommonJdbcUtil {
             while (rs.next()) {
                 data = rs.getString("jdoc");
             }
-            logger.info("Ok  getMastersValuesById " + data);
-            logger.info("Ok  getMastersValuesById query%%%%%% " + query);
+            logger.info("Ok   " + data);
+            logger.info("Ok  " + query);
             return data;
         });
     }
@@ -880,7 +877,7 @@ public class CommonJdbcUtil {
         String QueryString = (query.replace("$tablename", tableName));
 
         jdbcTemplate.update(QueryString, new Object[]{submasterid, masterid});
-        logger.info("Ok  M2Mmasterlink query " + query);
+        logger.info("Ok " + query);
 
     }
 
@@ -889,18 +886,16 @@ public class CommonJdbcUtil {
         String query = "Update $tablename set master_value_id = ? where id = ?";
         String QueryString = query.replace("$tablename", tableName);
         jdbcTemplate.update(QueryString, new Object[]{mastervalueid, submastervalues});
-        logger.info("Ok  M2Mmasterlink query " + query);
+        logger.info("Ok  " + query);
     }
 
     public String m2mAddForm(String id, String viewpage) {
-        logger.info(" INSIDE m2mAddForm started: ");
 //     jdbcTemplate.update("UPDATE  MASTER_TYPE SET master_id = null  where id =?", new Object[]{id});
         jdbcTemplate.update("UPDATE  MASTER_VALUE SET master_value_id = null  where master_value_id =?", new Object[]{id});
         return "true";
     }
 
     public String masterAddForm(String id, String viewpage) {
-        logger.info(" INSIDE MASTERTPYE started: ");
         String tableName1 = "MASTER_TYPE";
         String query1 = "delete from $tablename where id =?";
         String QueryString1 = query1.replace("$tablename", tableName1);
@@ -913,7 +908,7 @@ public class CommonJdbcUtil {
     }
 
     public String getEditM2Mvaluesutil(String id) {
-        logger.info(" INSIDE getEditM2Mvaluesutil  id : " + id);
+        logger.info(" INSIDE   id : " + id);
         String Query = "SELECT JSON_OBJECT('mastername', a.VALUE, 'masterid' ,a.id, 'submasternames', GROUP_CONCAT( b.VALUE )) as jdoc FROM MASTER_VALUE a, MASTER_VALUE b WHERE	a.id = b.master_value_id AND a.id =? GROUP BY	a.id";
         return jdbcTemplate.query(Query, new Object[]{id}, (ResultSet rs) -> {
             String data = "";
@@ -957,11 +952,11 @@ public class CommonJdbcUtil {
         String query = "insert into $tablename   (local_ip, global_ip, schema_name, user_id, module, functionality, operational_pk, action_name, before_values, table_name, date_time, role_name, operation_based_on_multiple_param_status) values( ?,?,?,?,?,?,?,?,?,?,?,?,?)";
         String QueryString = query.replace("$tablename", tableName);
         try {
-//            jdbcTemplate.update(query, new Object[]{applicationLoggingModel.getLocalIpAddress(), applicationLoggingModel.getGlobalIpAddress(), applicationLoggingModel.getSchemaName(), applicationLoggingModel.getUserId(), applicationLoggingModel.getModule(), applicationLoggingModel.getFunctionality(), applicationLoggingModel.getOperationalPKValue(), applicationLoggingModel.getOperationName(), applicationLoggingModel.getBeforeActionValues(), applicationLoggingModel.getOperationalTableName(), applicationLoggingModel.getOperationDateTime(), applicationLoggingModel.getUserRole(), applicationLoggingModel.getOperation_based_on_multiple_param_status()});
+//            jdbcTemplate.update(query, new Object[]{applicationLoggingModel.getLocalIpAddress(), applicationLoggingModel.getGlobalIpAddress(), applicationLoggingModel.getSchemaName(), applicationLoggingModel.getUserId(), applicationLoggingModel.getModule(), applicationLoggingModel.getFunctionality(),
+//                applicationLoggingModel.getOperationalPKValue(), applicationLoggingModel.getOperationName(), applicationLoggingModel.getBeforeActionValues(), applicationLoggingModel.getOperationalTableName(), applicationLoggingModel.getOperationDateTime(), applicationLoggingModel.getUserRole(), applicationLoggingModel.getOperation_based_on_multiple_param_status()});
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.info("Ok  saveMasterValueDataUtil for ifd ");
     }
 
     public void saveApplicationLogData() {
@@ -978,13 +973,6 @@ public class CommonJdbcUtil {
        
     }
 
-    String updateDataUtilnCustPrsnDtl(JsonNode userData, String tableName, String pageId, HttpSession session) {
-     logger.info(" update in table name set  getcolumnnamebypageid where useid is HttpSession.getUserID  ");
-        
-        
-        
-        return "null";
-    }
 
 }
 

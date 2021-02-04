@@ -8,6 +8,7 @@ package com.ils.common.LoanCustomer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ils.common.controller.CommonJdbcUtil;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -64,14 +65,39 @@ public class LoanCustomerJdbcUtil {
     }
 
     public void updateDataUtilnCustPrsnDtl(JsonNode userData, String tableName, String columnName, HttpSession session) {
-        String qry = " update "+tableName+"  set "+columnName+" = ?  where user_id =  "+ session.getAttribute("userNameId");
-      logger.info(qry);
+        String qry = " update " + tableName + "  set " + columnName + " = ? , r_id = '" + session.getAttribute("userNameId") + "'  where user_id =  " + session.getAttribute("userNameId");
+        logger.info(qry + " ::: " + userData.toString());
         try {
-            jdbcTemplate.update(qry, new Object[]{ userData.toString(), });
+            jdbcTemplate.update(qry, new Object[]{userData.toString()});
         } catch (Exception e) {
             logger.error(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public String findByRId(String clumnValue, String id) {
+        String QueryString = "SELECT JSON_OBJECT( 'id', USERS_DETAILS.id, 'dt', USERS_DETAILS.jdoc" + clumnValue + " ) as jdoc   FROM USERS_DETAILS WHERE  USERS_DETAILS.r_id=? ";
+        logger.info(QueryString + "  ID = " + id);
+        return jdbcTemplate.query(QueryString, new Object[]{id}, (ResultSet rs) -> {
+            String data = "";
+            while (rs.next()) {
+                data = rs.getString("jdoc");
+            }
+            return data;
+        });
+    }
+
+    public String getAllById(String id) {
+        String QueryString = "SELECT JSON_OBJECT( 'id', USERS_DETAILS.id, 'dt1', USERS_DETAILS.jdoc1  , 'dt2' , USERS_DETAILS.jdoc2  ) as jdoc   FROM USERS_DETAILS WHERE  USERS_DETAILS.id=? ";
+        logger.info(QueryString + "  ID = " + id);
+       
+        return jdbcTemplate.query(QueryString, new Object[]{id}, (ResultSet rs) -> {
+            String data = "";
+            while (rs.next()) {
+                data = rs.getString("jdoc");
+            }
+            return data;
+        });
     }
 
 }

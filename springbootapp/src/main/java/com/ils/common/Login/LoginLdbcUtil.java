@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,7 +28,8 @@ public class LoginLdbcUtil {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     HttpServletRequest request;
     @Autowired
@@ -53,11 +55,14 @@ public class LoginLdbcUtil {
 //    }
     public void updateLoginDataUtil(JsonNode userData, HttpServletRequest request, HttpSession session) {  //
 //   String encPass=   getEncrypPassword(userData.get("password"));
+
+        String encPass = passwordEncoder.encode(userData.get("password").toString());
+        logger.info("encPass : : : " + encPass);
         String page_distinguisher = userData.get("role_type_id").toString().replaceAll("\"", "").equals("2") ? "  where  main_menu  = 'Loan Form'   " : " ";   //  it is hard coded , take it  form role_type table ; change in newUserPAge.html too
-        String encPass = "$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.";
+//        String encPass = "$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.";
         String qry1 = " insert into USERS (username ,encrypted_password,created_date ,updated_date, role_type_id) "
                 + "values( ? ,? , now() ,now() , ?     ) ";
-        String qry2 = "insert into CUSTOMER_PERSONAL_DETAILS (user_id) values( ?   ) ";
+        String qry2 = "insert into USERS_DETAILS (user_id) values( ?   ) ";
         String qry3 = " insert into USERS_ROLE (USER_ID , ROLE_ID ) values (? , ? )";
         String qry4 = "insert into USER_PAGEMASTER_MAPPING ( user_id , page_id )  select ? , pk from PAGE_MASTER " + page_distinguisher;
 

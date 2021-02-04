@@ -95,7 +95,6 @@ public class SecurityController {
         session.setAttribute("userName", principal.getName());
         String userNameId = commonJdbcUtil.getuserIdByName(principal.getName());
         session.setAttribute("userNameId", userNameId);
-        
         return "pages/homePage";
     }
     

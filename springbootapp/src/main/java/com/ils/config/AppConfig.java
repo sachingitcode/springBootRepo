@@ -46,7 +46,6 @@ public class AppConfig {
     @Bean
     DataSource dataSource() {
         Logger logger = Logger.getLogger(AppConfig.class);
-
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setUrl(environment.getProperty(URL));
         driverManagerDataSource.setUsername(environment.getProperty(USER));

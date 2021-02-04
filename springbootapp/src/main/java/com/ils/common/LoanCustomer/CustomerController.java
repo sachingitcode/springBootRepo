@@ -39,9 +39,10 @@ public class CustomerController {
     public @ResponseBody
     String saveCustomerData(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap map, @RequestBody ObjectNode json) {
         JsonNode userData = json.get("userData");
+        
 //        getNextPrevousCurrentPAgefromTableNameByPageId ()   //also get which column to store  data
 //        String tableName = commonJdbcUtil.getTableNameformId(pageid);
-        String tableName = "CUSTOMER_PERSONAL_DETAILS";
+        String tableName = "USERS_DETAILS";
         String columnName = "jdoc" + json.get("pageSno").toString().replaceAll("\"", "");
         //  put session .ext for next page ${session.next} 
 //            session.setAttribute("next", "pages/customerPortal/custFncnlDetails");
@@ -56,12 +57,34 @@ public class CustomerController {
     String paytmController(HttpServletRequest request, HttpServletResponse response, HttpSession session) {    // id of country
         String id = session.getAttribute("id").toString();
         String data = null;
-
         logger.info("Method: " + data);
         return data;
     }
 
+//    String findByCustomerIdController(HttpServletRequest request, HttpServletResponse response, HttpSession session) {    // id of country
+//        String id = session.getAttribute("id").toString();
+//                    request.getParameter("pageSno");  
+//        return data;
+//    }
+    @RequestMapping(value = "/findByCustomerId", headers = "Accept=application/json")    // same as findByid
+    @ResponseBody
+    public String findByCustomerIdController(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        String rId = session.getAttribute("userNameId").toString();  //userId
+        char jdocId = request.getParameter("pageSno").charAt(0);
+        String data = loanCustomerJdbcUtil.findByRId(Character.toString(jdocId), session.getAttribute("userNameId").toString());
+        logger.info(data);
+        return data;
+    }
+    
+      @RequestMapping(value = "/findCustomerFullDetails", headers = "Accept=application/json")    // same as findByid
+    @ResponseBody
+    public String findCustomerFullDetailsbyId(HttpServletRequest request, HttpServletResponse response, HttpSession session  ) {
+         String id = session.getAttribute("id").toString();       //addapplication1
+        String data = loanCustomerJdbcUtil.getAllById( id);
+        logger.info(data);
+        return data;
+    }
     
     
-    
+
 }

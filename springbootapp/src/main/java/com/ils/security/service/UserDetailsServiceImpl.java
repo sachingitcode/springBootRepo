@@ -61,14 +61,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         String list2String = grantList.toString();
         logger.info("grantList : " + list2String);
-
         UserDetails userDetails = (UserDetails) new User(appUser.getUserName(), //
                 appUser.getEncryptedPassword(), grantList);
 //        HttpServletRequest request=ServletActionContext.getRequest();
 //        HttpSession session=request.getSession();
-
         logger.info("userDetails : " + userDetails.getUsername() + " ; " + userDetails.getPassword() + " ; isAccountNonExpired :" + userDetails.isAccountNonExpired() + " ,isAccountNonLocked: " + userDetails.isAccountNonLocked() + " ; isCredentialsNonExpired : " + userDetails.isCredentialsNonExpired() + " ,isEnabled :" + userDetails.isEnabled());
-
         return userDetails;
     }
 
