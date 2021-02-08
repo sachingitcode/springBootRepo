@@ -16,22 +16,20 @@ import org.springframework.security.core.userdetails.User;
  */
 public class WebUtils {
 
-     static Logger logger = Logger.getLogger( WebUtils.class);
-    
+    static Logger logger = Logger.getLogger(WebUtils.class);
+
     public static String toString(User user) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("UserName:").append(user.getUsername());
-    logger.info(" WebUtils:::  "+ sb.toString());
+        logger.info(" WebUtils:::  " + sb.toString());
         Collection<GrantedAuthority> authorities = user.getAuthorities();
         if (authorities != null && !authorities.isEmpty()) {
             sb.append(" (");
             boolean first = true;
             for (GrantedAuthority a : authorities) {
                 if (first) {
-                    
                     sb.append(a.getAuthority());
-                    
                     first = false;
                 } else {
                     sb.append(", ").append(a.getAuthority());
@@ -39,7 +37,7 @@ public class WebUtils {
             }
             sb.append(")");
         }
-         logger.info(" WebUtils with USERNAME   "+ sb.toString());
+        logger.info(" WebUtils with USERNAME   " + sb.toString());
         return sb.toString();
     }
 }

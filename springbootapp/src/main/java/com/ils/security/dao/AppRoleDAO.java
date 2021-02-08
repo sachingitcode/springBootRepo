@@ -5,8 +5,10 @@
  */
 package com.ils.security.dao;
 
+import com.ils.security.service.UserDetailsServiceImpl;
 import java.util.List;
 import javax.sql.DataSource;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -20,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class AppRoleDAO extends JdbcDaoSupport{
-    
+      Logger logger = Logger.getLogger(AppRoleDAO.class);
+  
     @Autowired
     public AppRoleDAO(DataSource dataSource) {
         this.setDataSource(dataSource);

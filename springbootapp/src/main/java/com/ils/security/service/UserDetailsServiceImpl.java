@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,20 +37,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private AppRoleDAO appRoleDAO;
-
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         AppUser appUser = this.appUserDAO.findUserAccount(userName);
-
         if (appUser == null) {
             logger.warn("User " + userName + " was not found in the database");
             throw new UsernameNotFoundException("User " + userName + " was not found in the database");
         }
         // [ROLE_USER, ROLE_ADMIN,..]
         List<String> roleNames = this.appRoleDAO.getRoleNames(appUser.getUserid());
-
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-
         if (roleNames != null) {
             for (String role : roleNames) {
                 // ROLE_USER, ROLE_ADMIN,..
@@ -58,15 +55,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 grantList.add(authority);
             }
         }
-
         String list2String = grantList.toString();
         logger.info("grantList : " + list2String);
         UserDetails userDetails = (UserDetails) new User(appUser.getUserName(), //
                 appUser.getEncryptedPassword(), grantList);
-//        HttpServletRequest request=ServletActionContext.getRequest();
-//        HttpSession session=request.getSession();
         logger.info("userDetails : " + userDetails.getUsername() + " ; " + userDetails.getPassword() + " ; isAccountNonExpired :" + userDetails.isAccountNonExpired() + " ,isAccountNonLocked: " + userDetails.isAccountNonLocked() + " ; isCredentialsNonExpired : " + userDetails.isCredentialsNonExpired() + " ,isEnabled :" + userDetails.isEnabled());
         return userDetails;
     }
 
+     
+
+    
 }
+//        HttpServletRequest request=ServletActionContext.getRequest();
+//        HttpSession session=request.getSession();

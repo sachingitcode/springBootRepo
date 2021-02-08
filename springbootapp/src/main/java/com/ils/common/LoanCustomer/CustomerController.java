@@ -84,6 +84,18 @@ public class CustomerController {
         logger.info(data);
         return data;
     }
+   
+    
+    @RequestMapping(value = "/findCustomerDocs", headers = "Accept=application/json")    // same as findByid
+    @ResponseBody
+    public String findCustomerDocsbyId(HttpServletRequest request, HttpServletResponse response, HttpSession session  ) {
+         String id = session.getAttribute("id").toString();       //addapplication1
+        String data = loanCustomerJdbcUtil.getAllDocsById( id);
+        logger.info(data);
+        return data;
+    }
+    
+    
     
     
 

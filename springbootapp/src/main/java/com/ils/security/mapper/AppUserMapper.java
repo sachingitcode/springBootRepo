@@ -23,10 +23,11 @@ public class AppUserMapper implements RowMapper<AppUser> {
 
     @Override
     public AppUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+                logger.info(" AppUserMapper :: " +  rs.getString("username") );
         Long userId = rs.getLong("user_id");
         String userName = rs.getString("username");
         String encrytedPassword = rs.getString("encrypted_password");
-//        logger.info(" AppUserMapper :: " + encrytedPassword);
+
         return new AppUser(userId, userName, encrytedPassword);
     }
 

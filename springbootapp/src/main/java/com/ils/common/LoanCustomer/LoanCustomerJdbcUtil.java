@@ -100,4 +100,16 @@ public class LoanCustomerJdbcUtil {
         });
     }
 
+    String getAllDocsById(String id) {
+      String QueryString = "    select JSON_OBJECT (doc_name, CONCAT(path, '', file_name) ) as jdoc from DOCS WHERE created_by=? ";
+        logger.info(QueryString + "  ID = " + id);
+       
+        return jdbcTemplate.query(QueryString, new Object[]{id}, (ResultSet rs) -> {
+            String data = "";
+            while (rs.next()) {
+                data = rs.getString("jdoc");
+            }
+            return data;
+        }); }
+
 }

@@ -15,9 +15,7 @@ import java.util.Properties;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.io.Resources;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import org.json.JSONArray; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -101,8 +98,8 @@ public class UploadController {
     @ResponseBody
     public String handleFileUpload(@RequestParam("photos") MultipartFile[] file,
             @RequestParam("doc_name") String docName,
-            RedirectAttributes redirectAttributes) {
-        String status = storageService.store(file, docName);
+            RedirectAttributes redirectAttributes, HttpSession session) {
+        String status = storageService.store(file, docName, session);
         logger.info("Document Name==>>" + docName);
 //        redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
 
@@ -131,7 +128,7 @@ public class UploadController {
     @PostMapping("/uploadNew")
     public @ResponseBody
     String singleFileUpload(@RequestParam("file") MultipartFile file,
-            @RequestParam(value = "label", required = false) String label,  HttpSession session) {
+            @RequestParam(value = "label", required = false) String label, HttpSession session) {
         logger.info(" label " + label);
 //        if (file.isEmpty()) {
 //            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
@@ -143,7 +140,7 @@ public class UploadController {
             Path path = Paths.get(UPLOADED_FOLDER + filename);
             Files.write(path, bytes);
             String fileExtension = common.getFileExtension(path.toString());
-            String status = commonJdbcUtil.saveFile(label, filename, UPLOADED_FOLDER, fileExtension);
+            String status = commonJdbcUtil.saveFile(label, filename, UPLOADED_FOLDER, fileExtension, (String) session.getAttribute("userNameId"));
             logger.info(" successfully Uploaded" + status);
         } catch (IOException e) {
             e.printStackTrace();

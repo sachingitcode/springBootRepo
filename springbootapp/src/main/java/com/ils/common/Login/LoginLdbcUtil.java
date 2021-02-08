@@ -56,7 +56,9 @@ public class LoginLdbcUtil {
     public void updateLoginDataUtil(JsonNode userData, HttpServletRequest request, HttpSession session) {  //
 //   String encPass=   getEncrypPassword(userData.get("password"));
 
-        String encPass = passwordEncoder.encode(userData.get("password").toString());
+        logger.info("nrml Paaswrd : : : " + userData.get("password"));
+        String encPass = passwordEncoder.encode(userData.get("password").toString().replaceAll("\"", ""));
+//         user.setPassword(passwordEncoder.encode(password));
         logger.info("encPass : : : " + encPass);
         String page_distinguisher = userData.get("role_type_id").toString().replaceAll("\"", "").equals("2") ? "  where  main_menu  = 'Loan Form'   " : " ";   //  it is hard coded , take it  form role_type table ; change in newUserPAge.html too
 //        String encPass = "$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.";

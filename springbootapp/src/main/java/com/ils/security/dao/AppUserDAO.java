@@ -8,6 +8,7 @@ package com.ils.security.dao;
 import com.ils.security.mapper.AppUserMapper;
 import com.ils.security.model.AppUser;
 import javax.sql.DataSource;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -21,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class AppUserDAO extends JdbcDaoSupport {
-
+    Logger logger = Logger.getLogger(AppUserDAO.class);
+  
     @Autowired
     public AppUserDAO(DataSource dataSource) {
         this.setDataSource(dataSource);

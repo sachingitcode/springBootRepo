@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
  *
  * @author maverick
  */
- @Service
+@Service
 public class CommonJdbcUtil {
 
     @Autowired
@@ -42,7 +42,6 @@ public class CommonJdbcUtil {
     final KeyHolder keyHolder = new GeneratedKeyHolder();
     Logger logger = Logger.getLogger(CommonJdbcUtil.class);
 
-    
     public JSONObject saveDataUtil(JsonNode data, String tableName, String id, HttpSession session) {   //Edit
         JSONObject jsondata = new JSONObject();
         logger.info("tid " + id);
@@ -84,8 +83,8 @@ public class CommonJdbcUtil {
 
 //    @Cacheable(value = "getNavDetail", key = "#id")
     public String[] getNavDetail(String id) {
-        String qry = "SELECT path ,id, previous, next FROM PAGES WHERE id=? " ;
-           logger.info(qry + "  ::  " + id );
+        String qry = "SELECT path ,id, previous, next FROM PAGES WHERE id=? ";
+        logger.info(qry + "  ::  " + id);
         return jdbcTemplate.query(qry, new Object[]{id}, (ResultSet rs) -> {
             String data[] = new String[4];
             while (rs.next()) {
@@ -162,7 +161,7 @@ public class CommonJdbcUtil {
         logger.info("updateDataUtil: " + QueryString + " r_id for updateDataUtil: " + id);
         String status = "true";
         try {
-            jdbcTemplate.update(QueryString, new Object[]{userData.toString(), id });
+            jdbcTemplate.update(QueryString, new Object[]{userData.toString(), id});
         } catch (Exception e) {
             status = "false";
             e.printStackTrace();
@@ -170,10 +169,8 @@ public class CommonJdbcUtil {
         logger.info("Ok  status for updateDataUtil " + status);
         return status;
     }
-    
-    
-    
-          public String getuserIdByName(String name) {
+
+    public String getuserIdByName(String name) {
         String QueryString = "SELECT user_id from  USERS   where username = ?  ";
         return jdbcTemplate.query(QueryString, new Object[]{name}, (ResultSet rs) -> {
             String data = null;
@@ -183,7 +180,6 @@ public class CommonJdbcUtil {
             return data;
         });
     }
-    
 
     public String InsertData(String tablename, JsonNode json, HttpSession session) {
         String status = "true";
@@ -267,7 +263,7 @@ public class CommonJdbcUtil {
         return jdbcTemplate.query(sql, new Object[]{id}, (ResultSet rs) -> {
             while (rs.next()) {
                 data.put("header", new JSONArray(rs.getString("header")));      //match header and json names in listing query 
-                data.put("values", findByIdListingwithDate(rs.getString("query"), startDate ,  endDate ));
+                data.put("values", findByIdListingwithDate(rs.getString("query"), startDate, endDate));
             }
             return data;
         });
@@ -307,12 +303,11 @@ public class CommonJdbcUtil {
             return array;
         });
     }
-    
-    
-     public JSONArray findByIdListingwithDate(String query , String startDate , String endDate) {
-         query = query.trim().endsWith(";") ? query.trim().replaceAll(";", " ") : query ;
-       query =  query + "  where  created_date  > '" +startDate  + "'   and created_date  < '" + endDate  +  "' ";
-         logger.info("Query : " + query);
+
+    public JSONArray findByIdListingwithDate(String query, String startDate, String endDate) {
+        query = query.trim().endsWith(";") ? query.trim().replaceAll(";", " ") : query;
+        query = query + "  where  created_date  > '" + startDate + "'   and created_date  < '" + endDate + "' ";
+        logger.info("Query : " + query);
         JSONArray array = new JSONArray();
         return jdbcTemplate.query(query, (ResultSet rs) -> {
             while (rs.next()) {
@@ -334,10 +329,10 @@ public class CommonJdbcUtil {
     }
 
     //Save File Details
-    public String saveFile(String docName, String filename, String path, String fileExtension) {
+    public String saveFile(String docName, String filename, String path, String fileExtension, String userId) {
         String status = "true";
         String tableName = "DOCS";
-        String query = "INSERT INTO $tablename (doc_name, file_name, path, created_by, created_date, extension) VALUES (?, ?, ?, 1, now(), ?)";
+        String query = "INSERT INTO $tablename (doc_name, file_name, path, created_by, created_date, extension) VALUES (?, ?, ?," + userId + " , now(), ?)";
         String QueryString = query.replace("$tablename", tableName);
         try {
             jdbcTemplate.update(QueryString, new Object[]{docName, filename, path, fileExtension});
@@ -392,7 +387,7 @@ public class CommonJdbcUtil {
             }
             return data;
         });
-    }   
+    }
 
     public JSONArray getNavData(String id) {
         JSONArray data = new JSONArray();
@@ -771,9 +766,9 @@ public class CommonJdbcUtil {
         logger.info("Ok  saveMasterValueDataUtil for id " + id);
     }
 
-    public String getBycommonQuery(String id , String userNameId) {
+    public String getBycommonQuery(String id, String userNameId) {
         String query = getQuery(id);
-        return jdbcTemplate.query(query,  new Object[]{userNameId},   (ResultSet rs) -> {
+        return jdbcTemplate.query(query, new Object[]{userNameId}, (ResultSet rs) -> {
             String data = "";
             while (rs.next()) {
                 data = rs.getString("menu");
@@ -968,11 +963,10 @@ public class CommonJdbcUtil {
         try {
         } catch (Exception e) {
             e.printStackTrace();
-             logger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
-       
-    }
 
+    }
 
 }
 

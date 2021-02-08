@@ -1,14 +1,5 @@
 package com.ils.util;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author maverick
- */
+ 
 import com.ils.common.controller.CommonJdbcUtil;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import org.springframework.core.io.Resource;
@@ -50,7 +42,7 @@ public class FileSystemStorageService {
         }
     }
 
-    public String store(MultipartFile[] files, String docName) {
+    public String store(MultipartFile[] files, String docName , HttpSession session) {
         Common common = new Common();
         String status = "";
         for (int i = 0; i < files.length; i++) {
@@ -74,7 +66,7 @@ public class FileSystemStorageService {
                     fileExtension = common.getFileExtension(path.toString());
                     logger.info("path==>>" + path + "docName==>>" + docName + "fileName==>>" + filename + "fileExtension==>>" + fileExtension);
                     Files.copy(inputStream, this.uploadLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
-                    status = commonJdbcUtil.saveFile(docName, filename, path.toString(), fileExtension);
+                    status = commonJdbcUtil.saveFile(docName, filename, path.toString(), fileExtension  ,  session.getAttribute("userNameId").toString());
                 }
             } catch (IOException e) {
                 status = "false";
