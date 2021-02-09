@@ -1,7 +1,6 @@
 
 
-RoleChanges 
-
+RoleChanges
 
 2 : 
 mysql> INSERT INTO `PAGE_MASTER`(`pk`, `link_name`, `url`, `description`, `id`, `addform`, `main_menu`, `sub_menu`, `icon`) VALUES (1, 'Apply1', 'apply', 'apply', '1', 'addApplication1', 'Masters', NULL, 'local_activity');
@@ -37,10 +36,12 @@ pages/layout --> pages/homePage
 string to obeject JSON.Parse ( respose.data.dt) ;
 
 
-
-
 ADD :: alter table T2 add constraint RIdT2 Unique Key (r_id) ;
       SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-      
+
+
+
+
+okk      
       
 
