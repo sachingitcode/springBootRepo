@@ -4,38 +4,39 @@
  * and open the template in the editor.
  */
 package com.ils.Interceptor;
- 
-import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import java.util.Enumeration;
+// import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
- *
  * @author maverick
  */
 
-public class Interceptor extends HandlerInterceptorAdapter {
-       Logger logger = Logger.getLogger(Interceptor.class);
-       
-    @Override
-    public boolean preHandle(HttpServletRequest request,   HttpServletResponse response, Object handler) throws Exception {
+public class Interceptor implements HandlerInterceptor {
+    Logger logger = Logger.getLogger(Interceptor.class);
+
+    //@Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //  logger.info("[preHandle][" + request + "]" + "[" + request.getMethod()   + "]" + request.getRequestURI() + getParameters(request));
         return true;
     }
 
-    @Override
+    //  @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, //
-            Object handler, ModelAndView modelAndView) throws Exception {
-      
+                           Object handler, ModelAndView modelAndView) throws Exception {
+
     }
 
-    @Override
+    //  @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, //
-            Object handler, Exception ex) throws Exception {
-        
+                                Object handler, Exception ex) throws Exception {
+
     }
 
     private String getParameters(HttpServletRequest request) {

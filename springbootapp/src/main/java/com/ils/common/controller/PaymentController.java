@@ -9,7 +9,7 @@ import static com.ils.common.controller.PaymentController.getPropValueForPaytm;
 import org.json.JSONObject;
 
 //import com.paytm.pg.merchant.PaytmChecksum;
-import com.paytm.pg.merchant.CheckSumServiceHelper;
+//import com.paytm.pg.merchant.CheckSumServiceHelper;
 //import com.paytm.pg.merchant.CheckSumServiceHelper;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -120,9 +120,9 @@ public class PaymentController {
         paytmParams.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);
         paytmParams.put("CALLBACK_URL", CALLBACK_URL);
 
-         String paytmChecksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(merchantKey, paytmParams);
+//         String paytmChecksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(merchantKey, paytmParams);
 //        String paytmChecksum = PaytmChecksum.generateSignature(paytmParams, "_h3j73qRWWlhf1Ay");
-
+        String paytmChecksum ="";
         paytmParams.put("CHECKSUMHASH", paytmChecksum);
 
         ModelAndView mav = new ModelAndView();
